@@ -23,7 +23,7 @@ class tech extends StatelessWidget {
                             backgroundImage: AssetImage("asset/Ellipse 8.png"),
               child: InkWell(
                 onTap: (() {
-                  Navigator.push(context,MaterialPageRoute(builder: (context) => myprofile()));
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => profile()));
                 }),
               ),
             ),

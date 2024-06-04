@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flux/channels.dart';
 import 'package:flux/chatpage.dart';
-import 'package:flux/drawer.dart';
 import 'package:flux/profile.dart';
-import 'package:flux/createprofile.dart';
-import 'package:flux/service.dart';
-import 'package:flux/worknow.dart';
 
-class chatsearch extends StatelessWidget {
-  const chatsearch({super.key});
+
+class ChatSearch extends StatelessWidget {
+  const ChatSearch({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold( 
       appBar: AppBar(
-        title: Text("FLUX"),
+        title: Text("FLUX",style: TextStyle(color: Colors.white)),
         backgroundColor: Color.fromRGBO(8, 38, 76, 1),
         leading: IconButton(onPressed: (){
           Navigator.pop(context);
-        }, icon: Icon(Icons.arrow_back)),
+        }, icon: Icon(Icons.arrow_back,color: Colors.white)),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -27,7 +23,7 @@ class chatsearch extends StatelessWidget {
               backgroundImage: AssetImage("asset/Ellipse 22.png"),
               child: InkWell(
                 onTap: () => Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => myprofile())),
+                    context, MaterialPageRoute(builder: (context) => profile())),
               ),
             ),
           ),
@@ -62,12 +58,12 @@ class chatsearch extends StatelessWidget {
                     ),
                     trailing: Text("1$index:00 PM"),
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => chatpage(), // Replace with your ChatPage widget
-                        ),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => ChatPage(), // Replace with your ChatPage widget
+                      //   ),
+                      // );
                     },
                   );
                 },

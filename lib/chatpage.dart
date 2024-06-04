@@ -1,84 +1,135 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flux/chatprofile.dart';
-import 'package:flux/createprofile.dart';
+import 'package:flux/collection/chatmessage_mode.dart';
+import 'package:flux/collection/myprofilemodel.dart';
+import 'package:flux/data/message_controller.dart';
 import 'package:flux/videocall.dart';
 
-class chatpage extends StatelessWidget {
-  const chatpage({super.key});
+class ChatPage extends StatefulWidget {
+  Myprofilemodel? senderProfileModel;
+   ChatPage({super.key,required this.senderProfileModel});
+
+  @override
+  State<ChatPage> createState() => _ChatPageState();
+}
+
+class _ChatPageState extends State<ChatPage> {
+  final TextEditingController _messageController = TextEditingController();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  // final String receiverId = ; // Replace with actual receiver ID
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: TextButton(
-            onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => cprofile()));
-            },
-            child: Text(
-              "Lilly",
-              style: TextStyle(color: Colors.white),
-            )), // Replace with contact name or image
-        backgroundColor: Color.fromRGBO(8, 38, 76, 1),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const cprofile()));
+          },
+          child:  Text(
+            widget.senderProfileModel!.firstname,
+            style: TextStyle(color: Colors.white),
+          ),
+        ), // Replace with contact name or image
+        backgroundColor: const Color.fromRGBO(8, 38, 76, 1),
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           }, // Go back
-          icon: Icon(Icons.arrow_back_ios_new_outlined),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),
         actions: [
           IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          videocall()), // Replace with your ServicesPage widget
-                );
-              },
-              icon: Icon(Icons.video_call_outlined)),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        const videocall()), // Replace with your ServicesPage widget
+              );
+            },
+            icon: const Icon(Icons.video_camera_front, color: Colors.white),
+          ),
         ],
         centerTitle: true,
       ),
       body: Column(
         children: [
-          // Chat messages list (replace with actual data fetching/display logic)
+          // Chat messages list
           Expanded(
-            child: ListView.builder(
-              reverse: true, // Display newest messages at the top
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                final message = messages[index];
-                return _buildMessage(message);
+            child: StreamBuilder<QuerySnapshot>(
+              stream: MessageController().receiveMessage(widget.senderProfileModel!.id, FirebaseAuth.instance.currentUser!.uid),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                List<ChatMessage> messages = snapshot.data!.docs.map((doc) {
+                  return ChatMessage.fromMap(doc.data() as Map<String, dynamic>);
+                }).toList();
+
+                return ListView.builder(
+                  reverse: true, // Display newest messages at the top
+                  itemCount: messages.length,
+                  itemBuilder: (context, index) {
+                    final message = messages[index];
+                    return _buildMessage(message);
+                  },
+                );
               },
             ),
           ),
           // Chat input bar
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              border: Border(top: BorderSide(color: Colors.grey[400]!)),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: "Type a message...",
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(30.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      _showAttachmentMenu(context);
+                    },
+                    icon: const Icon(Icons.attach_file),
+                  ),
+                  Expanded(
+                    child: TextField(
+                      controller: _messageController,
+                      decoration: const InputDecoration(
+                        hintText: "Type a message...",
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
+                      ),
                     ),
                   ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.attach_file),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.send),
-                ),
-              ],
+                  IconButton(
+                    onPressed:(){
+
+                      if(_messageController.text.isNotEmpty){
+                        
+MessageController().sendMessage(widget.senderProfileModel!.id!, _messageController.text);
+_messageController.clear();
+                      }
+                    },//////////////////////////////////
+                    icon: const Icon(Icons.send),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -86,75 +137,85 @@ class chatpage extends StatelessWidget {
     );
   }
 
-  Widget _buildMessage(Message message) {
-    final isMe = message.sender == "Me";
+  Widget _buildMessage(ChatMessage message) {
+    final isMe = message.senderId == _auth.currentUser!.uid;
     return Align(
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
-        padding: EdgeInsets.all(10.0),
-        margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+        padding: const EdgeInsets.all(12.0),
+        margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.0),
-          color: isMe ? Colors.blue[100] : Colors.grey[200],
+          color: isMe ? Colors.lightBlueAccent : Colors.grey[200],
+          borderRadius: BorderRadius.only(
+            topLeft: const Radius.circular(15.0),
+            topRight: const Radius.circular(15.0),
+            bottomLeft: isMe ? const Radius.circular(15.0) : const Radius.circular(0.0),
+            bottomRight: isMe ? const Radius.circular(0.0) : const Radius.circular(15.0),
+          ),
         ),
-        child: Text(message.text),
+        child: Text(
+          message.text,
+          style: TextStyle(
+            color: isMe ? Colors.white : Colors.black,
+          ),
+        ),
       ),
     );
   }
-}
 
-class Message {
-  final String sender;
-  final String text;
+  // void _sendMessage() {
+  //   if (_messageController.text.isEmpty) {
+  //     return;
+  //   }
 
-  Message({required this.sender, required this.text});
-}
+  //   final chatMessage = ChatMessage(
+  //     senderId: _auth.currentUser!.uid,
+  //     receiverId: ,
+  //     text: _messageController.text,
+  //     timestamp: Timestamp.now(),
+  //   );
 
-// Sample messages (replace with actual data fetching logic)
-List<Message> messages = [
-  Message(sender: "Lilly", text: "Hi! How are you?"),
-  Message(sender: "Me", text: "Hey, I'm doing well. What about you?"),
-  Message(sender: "Lilly", text: "Great! What are you up to today?"),
-  // Add more messages...
-];
-void _showAttachmentMenu(BuildContext context) {
-  showModalBottomSheet(
+  //   _firestore.collection('messages').add(chatMessage.toMap());
+  //   _messageController.clear();
+  // }
+
+  void _showAttachmentMenu(BuildContext context) {
+    showModalBottomSheet(
       context: context,
-      builder: (BuildContext context) => Container(
+      builder: (BuildContext context) {
+        return Container(
           height: 200.0,
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            ListTile(
-              leading: Icon(Icons.photo_library),
-              title: Text('Gallery'),
-              onTap: () {
-                // Implement gallery option (e.g., using image_picker)
-                print('Gallery selected');
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.videocam),
-              title: Text('Video'),
-              onTap: () {
-                // Implement video option (e.g., using video_player)
-                print('Video selected');
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.videocam),
-              title: Text('Audio'),
-              onTap: () {
-                // Implement video option (e.g., using video_player)
-                print('Audio selected');
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.videocam),
-              title: Text('Pay'),
-              onTap: () {
-                // Implement video option (e.g., using video_player)
-                print('Pay selected');
-              },
-            ),
-          ])));
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Gallery'),
+                onTap: () {
+                  // Implement gallery option
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: const Text('Camera'),
+                onTap: () {
+                  // Implement camera option
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.insert_drive_file),
+                title: const Text('Document'),
+                onTap: () {
+                  // Implement document option
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }

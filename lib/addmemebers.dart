@@ -16,7 +16,11 @@ class _addmemState extends State<addmem> {
       appBar: AppBar(
         title: Text("Members"),
         backgroundColor: Color.fromRGBO(8, 38, 76, 1),
-        leading: Icon(Icons.arrow_back_ios_new_outlined),
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back, color: Colors.white)),
         centerTitle: true,
       ),
       body: Column(
@@ -36,8 +40,7 @@ class _addmemState extends State<addmem> {
                   ),
                 ),
               ),
-              onChanged: (text) =>
-                  setState(() {}), // Update search text
+              onChanged: (text) => setState(() {}), // Update search text
             ),
           ),
           Expanded(
@@ -96,5 +99,7 @@ class Contact {
   bool isSelected;
 
   Contact(
-      {required this.name, required this.avatarPath, this.isSelected = false});
+      {required this.name, 
+      required this.avatarPath, 
+      this.isSelected = false});
 }

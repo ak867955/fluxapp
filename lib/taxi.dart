@@ -101,10 +101,10 @@ class taxi extends StatelessWidget {
                           children: [
                             ElevatedButton.icon(
                               onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => chatpage()));
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) => ChatPage()));
                               },
                               icon: Icon(Icons.chat),
                               label: Text("Chat"),

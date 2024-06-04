@@ -24,7 +24,7 @@ class dmwork extends StatelessWidget {
               child: InkWell(
                 onTap: (() {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => myprofile()));
+                      MaterialPageRoute(builder: (context) => profile()));
                 }),
               ),
             ),

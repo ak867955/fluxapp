@@ -9,7 +9,7 @@ class videocall extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.black, // Match background color
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back,color: Colors.white),
           color: Colors.white, // White for better visibility
           onPressed: () => Navigator.pop(context),
         ),

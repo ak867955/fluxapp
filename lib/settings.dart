@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flux/chatpage.dart';
 import 'package:flux/feedback.dart';
 
@@ -11,195 +9,162 @@ class settings extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Settings"),
+        title: Text("Settings", style: TextStyle(color: Colors.white)),
         backgroundColor: Color.fromRGBO(8, 38, 76, 1),
         leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(Icons.arrow_back_ios_new_outlined)),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back,color: Colors.white),
+        ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                customeText(
-                  "My Account",
-                  fontweight: FontWeight.bold,
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                customeText(
-                  "Phone Number",
-                ),
-                TextButton(onPressed: () {}, child: Text("9856743859")),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                customeText(
-                  "Profile Photo",
-                ),
-                Icon(
-                  Icons.navigate_next_rounded,
-                  color: Colors.black,
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                customeText(
-                  "Name",
-                ),
-                TextButton(onPressed: () {}, child: Text("9856743859")),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                customeText(
-                  "Privacy & Security",
-                  fontweight: FontWeight.bold,
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                customeText(
-                  "See my location",
-                ),
-                TextButton(onPressed: () {}, child: Text("Everyone")),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                customeText(
-                  "Contact me",
-                ),
-                TextButton(onPressed: () {}, child: Text("Everyone")),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                customeText(
-                  "Support",
-                  fontweight: FontWeight.bold,
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                customeText(
-                  "Help Center",
-                ),
-                IconButton(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildSectionTitle("My Account"),
+              _buildListTile(
+                context,
+                title: "Phone Number",
+                trailing: TextButton(onPressed: () {}, child: Text("9856743859")),
+              ),
+              _buildListTile(
+                context,
+                title: "Profile Photo",
+                trailing: Icon(Icons.navigate_next_rounded, color: Colors.black),
+              ),
+              _buildListTile(
+                context,
+                title: "Name",
+                trailing: TextButton(onPressed: () {}, child: Text("Jack")),
+              ),
+              _buildSectionTitle("Privacy & Security"),
+              _buildListTile(
+                context,
+                title: "See my location",
+                trailing: TextButton(onPressed: () {}, child: Text("Everyone")),
+              ),
+              _buildListTile(
+                context,
+                title: "Contact me",
+                trailing: TextButton(onPressed: () {}, child: Text("Everyone")),
+              ),
+              _buildSectionTitle("Support"),
+              _buildListTile(
+                context,
+                title: "Help Center",
+                trailing: IconButton(
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              chatpage()), // Replace with your ServicesPage widget
+                      MaterialPageRoute(builder: (context) => ChatPage()),
                     );
-                  }, // Go back
+                  },
                   icon: Icon(Icons.task_alt),
                 ),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                customeText(
-                  "Report a problem",
-                ),
-                IconButton(
+              ),
+              _buildListTile(
+                context,
+                title: "Report a problem",
+                trailing: IconButton(
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              chatpage()), // Replace with your ServicesPage widget
+                      MaterialPageRoute(builder: (context) => ChatPage()),
                     );
-                  }, // Go back
+                  },
                   icon: Icon(Icons.report),
                 ),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                customeText(
-                  "Feedback",
-                ),
-                IconButton(
+              ),
+              _buildListTile(
+                context,
+                title: "Feedback",
+                trailing: IconButton(
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              fb()), // Replace with your ServicesPage widget
+                      MaterialPageRoute(builder: (context) => fb()),
                     );
-                  }, // Go back
+                  },
                   icon: Icon(Icons.help_center_outlined),
                 ),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                customeText(
-                  "Language",
-                  fontweight: FontWeight.bold,
+              ),
+              _buildSectionTitle("Language"),
+              SizedBox(height: 20),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {},
+                  child: Text(
+                    "Log Out",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    minimumSize: Size(150, 50),
+                  ),
                 ),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            ElevatedButton(
-                onPressed: () {},
-                child: Text(
-                  "Log Out",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.black),
-                ))
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget customeText(String text, {FontWeight? fontweight}) {
-    return Text(text,
-        style: TextStyle(
-            color: Colors.black, fontWeight: fontweight ?? FontWeight.normal));
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Text(
+        title,
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Widget _buildListTile(BuildContext context,
+      {required String title, Widget? trailing}) {
+    return Column(
+      children: [
+        ListTile(
+          title: Text(
+            title,
+            style: TextStyle(fontSize: 16),
+          ),
+          trailing: trailing,
+        ),
+        Divider(thickness: 1, color: Colors.grey[300]),
+      ],
+    );
+  }
+}
+
+class ChatPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Chat Page'),
+      ),
+      body: Center(
+        child: Text('Chat Page Content'),
+      ),
+    );
+  }
+}
+
+class FeedbackPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Feedback Page'),
+      ),
+      body: Center(
+        child: Text('Feedback Page Content'),
+      ),
+    );
   }
 }

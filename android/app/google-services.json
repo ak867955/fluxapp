@@ -1,32 +1,13 @@
 {
   "project_info": {
-    "project_number": "1062790206627",
-    "project_id": "flux-91df3",
-    "storage_bucket": "flux-91df3.appspot.com"
+    "project_number": "528086032127",
+    "project_id": "fluxproject-53ce3",
+    "storage_bucket": "fluxproject-53ce3.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1062790206627:android:cd085f221fc628a9765b16",
-        "android_client_info": {
-          "package_name": "com.example.adminfluxapp"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBZd7i8aq9PAywRZZmGZPO-DiuIqE4yZOs"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:1062790206627:android:c999570f211d22ce765b16",
+        "mobilesdk_app_id": "1:528086032127:android:70b80ab8b38b84c384b6ca",
         "android_client_info": {
           "package_name": "com.example.flux"
         }
@@ -34,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBZd7i8aq9PAywRZZmGZPO-DiuIqE4yZOs"
+          "current_key": "AIzaSyDuH-iDJUjW3qcohW2ecd4L-sdi1-lNNG8"
         }
       ],
       "services": {

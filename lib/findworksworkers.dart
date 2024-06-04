@@ -91,14 +91,14 @@ class _fworkersState extends State<fworkers> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => myprofile()),
+                                builder: (context) => profile()),
                           );
                           break;
                         case 1:
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => myprofile()),
+                                builder: (context) => profile()),
                           );
                           break;
                         case 2:
@@ -106,7 +106,7 @@ class _fworkersState extends State<fworkers> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    myprofile()), // Replace with your WorknowPage widget
+                                    profile()), // Replace with your WorknowPage widget
                           );
                           break;
                         case 3:
@@ -114,7 +114,7 @@ class _fworkersState extends State<fworkers> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    myprofile()), // Replace with your ServicesPage widget
+                                    profile()), // Replace with your ServicesPage widget
                           );
                           break;
                         case 4:
@@ -122,7 +122,7 @@ class _fworkersState extends State<fworkers> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    myprofile()), // Replace with your ServicesPage widget
+                                    profile()), // Replace with your ServicesPage widget
                           );
                           break;
                         case 5:
@@ -130,7 +130,7 @@ class _fworkersState extends State<fworkers> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    myprofile()), // Replace with your ServicesPage widget
+                                    profile()), // Replace with your ServicesPage widget
                           );
                           break;
                         case 6:
@@ -138,7 +138,7 @@ class _fworkersState extends State<fworkers> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    myprofile()), // Replace with your ServicesPage widget
+                                    profile()), // Replace with your ServicesPage widget
                           );
                           break;
                         case 7:
@@ -146,7 +146,7 @@ class _fworkersState extends State<fworkers> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    myprofile()), // Replace with your ServicesPage widget
+                                    profile()), // Replace with your ServicesPage widget
                           );
                           break;
                         case 8:
@@ -154,7 +154,7 @@ class _fworkersState extends State<fworkers> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    myprofile()), // Replace with your ServicesPage widget
+                                    profile()), // Replace with your ServicesPage widget
                           );
                           break;
                         case 9:
@@ -162,7 +162,7 @@ class _fworkersState extends State<fworkers> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    myprofile()), // Replace with your ServicesPage widget
+                                    profile()), // Replace with your ServicesPage widget
                           );
                           break;
                       }

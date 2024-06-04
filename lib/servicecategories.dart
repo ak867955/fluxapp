@@ -13,16 +13,21 @@ class ServicePost {
   const ServicePost({
     required this.avatarUrl,
     required this.serviceName,
-    required this.imageUrl,
+    required this.imageUrl, 
     required this.price,
     required this.time,
     required this.serviceDetails,
   });
 }
 
-class plumbing extends StatelessWidget {
-  const plumbing({super.key});
+class ServiceCategories extends StatefulWidget {
+  const ServiceCategories({super.key});
 
+  @override
+  State<ServiceCategories> createState() => _ServiceCategoriesState();
+}
+
+class _ServiceCategoriesState extends State<ServiceCategories> {
   @override
   Widget build(BuildContext context) {
     final List<ServicePost> posts = [
@@ -48,13 +53,13 @@ class plumbing extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Posts"),
+        title: Text("Posts", style: TextStyle(color: Colors.white)),
         backgroundColor: Color.fromRGBO(8, 38, 76, 1),
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios_new_outlined),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
         ),
         actions: [Icon(Icons.search_rounded)],
         centerTitle: true,
@@ -99,10 +104,10 @@ class plumbing extends StatelessWidget {
                           children: [
                             ElevatedButton.icon(
                               onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => chatpage()));
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) => ChatPage()));
                               },
                               icon: Icon(Icons.chat),
                               label: Text("Chat"),

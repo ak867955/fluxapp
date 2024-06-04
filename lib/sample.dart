@@ -1,88 +1,161 @@
-import 'package:flutter/material.dart';
-import 'package:flux/channels.dart';
-import 'package:flux/chatpage.dart';
-import 'package:flux/drawer.dart';
-import 'package:flux/profile.dart';
-import 'package:flux/createprofile.dart';
-import 'package:flux/service.dart';
-import 'package:flux/worknow.dart';
+// import 'package:flutter/material.dart';
 
-class ex extends StatelessWidget {
-  const ex({super.key});
+// void main() {
+//   runApp(KonnectApp());
+// }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: drawer(),
-      appBar: AppBar(
-        title: Text("FLUX"),
-        backgroundColor: Color.fromRGBO(8, 38, 76, 1),
-        leading: Builder(
-          builder: (context) => IconButton(
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-            icon: Icon(Icons.menu),
-          ),
-        ),
-        actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.search)),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CircleAvatar(
-              backgroundColor: Colors.white,
-              backgroundImage: AssetImage("asset/Ellipse 22.png"),
-              child: InkWell(
-                onTap: () => Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => myprofile())),
-              ),
-            ),
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Add the TextField here
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: "Search...",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-              ),
-            ),
-            // Existing ListView.builder
-            Expanded(
-              child: ListView.builder(
-                itemCount: 20,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text("PERSON $index"),
-                    subtitle: Text("Message $index"),
-                    leading: CircleAvatar(
-                      radius: 30,
-                      backgroundImage: AssetImage("asset/Ellipse 22.png"), // Replace with your asset path
-                    ),
-                    trailing: Text("1$index:00 PM"),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => chatpage(), // Replace with your ChatPage widget
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+// class KonnectApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Konnect',
+//       theme: ThemeData(
+//         primarySwatch: Colors.green,
+//       ),
+//       home: KonnectPage(),
+//     );
+//   }
+// }
+
+// class KonnectPage extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Center(
+//         child: Container(
+//           padding: EdgeInsets.symmetric(horizontal: 24),
+//           decoration: BoxDecoration(
+//             gradient: LinearGradient(
+//               colors: [Colors.white, Colors.grey[200]!],
+//               begin: Alignment.topCenter,
+//               end: Alignment.bottomCenter,
+//             ),
+//           ),
+//           child: Column(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             children: <Widget>[
+//               Text(
+//                 'Welcome to',
+//                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
+//               ),
+//               Text(
+//                 'Konnect',
+//                 style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.purple),
+//               ),
+//               SizedBox(height: 16),
+//               CircleAvatar(
+//                 radius: 50,
+//                 backgroundImage: NetworkImage('https://via.placeholder.com/100'), // replace with actual image URL
+//               ),
+//               SizedBox(height: 8),
+//               Text(
+//                 'Nick Manson',
+//                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+//               ),
+//               SizedBox(height: 8),
+//               Text(
+//                 'nickmanson@konnect.com',
+//                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Colors.grey[600]),
+//               ),
+//               SizedBox(height: 24),
+//               GenderSelection(),
+//               SizedBox(height: 24),
+//               ElevatedButton(
+//                 onPressed: () {
+//                   // Connect button action
+//                 },
+//                 style: ElevatedButton.styleFrom(
+//                   padding: EdgeInsets.symmetric(horizontal: 48, vertical: 12),
+//                   shape: RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.circular(24.0),
+//                   ),
+//                   backgroundColor: Colors.green,
+//                 ),
+//                 child: Text(
+//                   'Connect',
+//                   style: TextStyle(fontSize: 16),
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// class GenderSelection extends StatefulWidget {
+//   @override
+//   _GenderSelectionState createState() => _GenderSelectionState();
+// }
+
+// class _GenderSelectionState extends State<GenderSelection> {
+//   String? selectedGender;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.center,
+//       children: <Widget>[
+//         GestureDetector(
+//           onTap: () {
+//             setState(() {
+//               selectedGender = 'Male';
+//             });
+//           },
+//           child: GenderOption(
+//             icon: Icons.male,
+//             label: 'Male',
+//             isSelected: selectedGender == 'Male',
+//           ),
+//         ),
+//         SizedBox(width: 32),
+//         GestureDetector(
+//           onTap: () {
+//             setState(() {
+//               selectedGender = 'Female';
+//             });
+//           },
+//           child: GenderOption(
+//             icon: Icons.female,
+//             label: 'Female',
+//             isSelected: selectedGender == 'Female',
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
+
+// class GenderOption extends StatelessWidget {
+//   final IconData icon;
+//   final String label;
+//   final bool isSelected;
+
+//   const GenderOption({
+//     required this.icon,
+//     required this.label,
+//     required this.isSelected,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: <Widget>[
+//         Icon(
+//           icon,
+//           size: 48,
+//           color: isSelected ? Colors.blue : Colors.grey,
+//         ),
+//         Text(
+//           label,
+//           style: TextStyle(
+//             fontSize: 16,
+//             fontWeight: FontWeight.w600,
+//             color: isSelected ? Colors.blue : Colors.grey,
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }

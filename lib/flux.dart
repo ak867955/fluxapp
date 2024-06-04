@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flux/channels.dart';
 import 'package:flux/chat.dart';
@@ -6,66 +8,70 @@ import 'package:flux/service.dart';
 import 'package:flux/worknow.dart';
 
 class bottomnavipage extends StatefulWidget {
-  int indexnum = 0;
+  final int initialIndex;
 
-  bottomnavipage({super.key, required this.indexnum});
+  const bottomnavipage({Key? key, required this.initialIndex}) : super(key: key);
 
   @override
   State<bottomnavipage> createState() => _bottomnavipageState();
 }
 
 class _bottomnavipageState extends State<bottomnavipage> {
-  final _pages = [
-    const chat(),
+  late int _selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialIndex;
+  }
+
+  final List<Widget> _pages = [
+    const Chat(),
     const channels(),
     worknow(),
     service(),
-    const channels(),
-    const mychannels()
+    // const mychannels(),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[widget.indexnum],
-      bottomNavigationBar: myNav(
-        index: widget.indexnum,
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
         onTap: (index) {
           setState(() {
-            widget.indexnum = index;
+            _selectedIndex = index;
           });
         },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat),
+            label: 'Chat',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people),
+            label: 'Channels',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.work),
+            label: 'Work Now',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.spa),
+            label: 'Services',
+          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.star),
+          //   label: 'My Channels',
+          // ),
+        ],
+        selectedItemColor: Color.fromRGBO(8, 38, 76, 1), // Adjust to match your color scheme
+        unselectedItemColor: Colors.grey[600], // Adjust to match your color scheme
+        selectedFontSize: 12, // Adjust font size
+        unselectedFontSize: 12, // Adjust font size
+        type: BottomNavigationBarType.fixed, // Ensure all items are always visible
       ),
     );
   }
-}
-
-Widget myNav({
-  int? index,
-  void Function(int)? onTap,
-  selectedcolor,
-}) {
-  return BottomNavigationBar(
-    showUnselectedLabels: true,
-    currentIndex: index!,
-    selectedItemColor: Colors.blue,
-    unselectedItemColor: Colors.black,
-    showSelectedLabels: true,
-    onTap: onTap,
-    items: const [
-      BottomNavigationBarItem(
-          icon: Icon(Icons.chat), label: 'Chat', backgroundColor: Colors.white),
-      BottomNavigationBarItem(
-          icon: Icon(Icons.people),
-          label: 'Channels',
-          backgroundColor: Colors.white),
-      BottomNavigationBarItem(
-          icon: Icon(Icons.work),
-          label: 'Worknow',
-          backgroundColor: Colors.white),
-      BottomNavigationBarItem(
-          icon: Icon(Icons.spa),
-          label: 'Services',
-          backgroundColor: Colors.white),
-    ],
-  );
 }

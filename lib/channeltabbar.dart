@@ -6,12 +6,15 @@ import 'package:flux/channelfile.dart';
 import 'package:flux/channellinks.dart';
 import 'package:flux/channelsearch.dart';
 import 'package:flux/channelmenu.dart';
+import 'package:flux/collection/newchannelmodel.dart';
 import 'package:flux/drawer.dart';
 import 'package:flux/mychannels.dart';
 import 'package:flux/profile.dart';
 
 class ctab extends StatefulWidget {
-  const ctab({super.key});
+    ChannelModel channelModel;
+
+   ctab({super.key,required this.channelModel});
 
   @override
   State<ctab> createState() => _ChannelsState();
@@ -26,29 +29,29 @@ class _ChannelsState extends State<ctab> {
       length: 4,
       child: Scaffold(
         appBar: AppBar(
-          bottom: TabBar(
+          bottom: const TabBar(
             tabs: [
-              Tab(
-                child: Text("About"),
+              const Tab(
+                child: Text("About",style: TextStyle(color: Colors.white)),
               ),
               Tab(
-                child: Text("Files"),
+                child: Text("Files",style: TextStyle(color: Colors.white)),
               ),
               Tab(
-                child: Text("Audio"),
+                child: Text("Audio",style: TextStyle(color: Colors.white)),
               ),
               Tab(
-                child: Text("Links"),
+                child: Text("Links",style: TextStyle(color: Colors.white)),
               ),
             ],
           ),
-          title: Text("FLUX"),
-          backgroundColor: Color.fromRGBO(8, 38, 76, 1),
+          title: const Text("FLUX",style: TextStyle(color: Colors.white)),
+          backgroundColor: const Color.fromRGBO(8, 38, 76, 1),
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
             }, // Go back
-            icon: Icon(Icons.arrow_back_ios_new_outlined),
+            icon: const Icon(Icons.arrow_back,color: Colors.white),
           ),
           actions: [
             IconButton(
@@ -56,15 +59,15 @@ class _ChannelsState extends State<ctab> {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => csearch()));
                 },
-                icon: Icon(Icons.search)),
+                icon: const Icon(Icons.search,color: Colors.white)),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: CircleAvatar(
-                backgroundImage: AssetImage("asset/Ellipse 22.png"),
+                backgroundImage: const AssetImage("asset/Ellipse 22.png"),
                 child: InkWell(
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => myprofile()),
+                    MaterialPageRoute(builder: (context) => const profile()),
                   ),
                 ),
               ),
@@ -73,7 +76,7 @@ class _ChannelsState extends State<ctab> {
         ),
         body: TabBarView(
           children: [
-            cmenu(), // Use the AllChannels widget directly
+             cmenu(channelModel: widget.channelModel,), // Use the AllChannels widget directly
             cfile(), // Use the MyChannels widget directly
             caudio(),
             clink(),

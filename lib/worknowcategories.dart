@@ -13,14 +13,15 @@ import 'package:flux/mychannels.dart';
 import 'package:flux/profile.dart';
 import 'package:flux/worknowtabbar.dart';
 
-class wtab extends StatefulWidget {
-  const wtab({super.key});
+class worknowcategories extends StatefulWidget {
+  String selectedCategory;
+   worknowcategories({super.key,required this.selectedCategory});
 
   @override
-  State<wtab> createState() => _ChannelsState();
+  State<worknowcategories> createState() => _ChannelsState();
 }
 
-class _ChannelsState extends State<wtab> {
+class _ChannelsState extends State<worknowcategories> {
   int selectedTab = 0;
 
   @override
@@ -29,23 +30,23 @@ class _ChannelsState extends State<wtab> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          bottom: TabBar(
+          bottom: const TabBar(
             tabs: [
               Tab(
-                child: Text("Find Works"),
+                child: Text("My Works",style: TextStyle(color: Colors.white)),
               ),
               Tab(
-                child: Text("Find Talents"),
+                child: Text("Find Works",style: TextStyle(color: Colors.white)),
               ),
             ],
           ),
-          title: Text("FLUX"),
-          backgroundColor: Color.fromRGBO(8, 38, 76, 1),
+          title: const Text("FLUX",style: TextStyle(color: Colors.white)),
+          backgroundColor: const Color.fromRGBO(8, 38, 76, 1),
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
             }, // Go back
-            icon: Icon(Icons.arrow_back_ios_new_outlined),
+            icon: const Icon(Icons.arrow_back,color: Colors.white),
           ),
           actions: [
             IconButton(
@@ -53,15 +54,15 @@ class _ChannelsState extends State<wtab> {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => csearch()));
                 },
-                icon: Icon(Icons.search)),
+                icon: const Icon(Icons.search,color: Colors.white)),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: CircleAvatar(
-                backgroundImage: AssetImage("asset/Ellipse 22.png"),
+                backgroundImage: const AssetImage("asset/Ellipse 22.png"),
                 child: InkWell(
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => myprofile()),
+                    MaterialPageRoute(builder: (context) => const profile()),
                   ),
                 ),
               ),
@@ -70,8 +71,8 @@ class _ChannelsState extends State<wtab> {
         ),
         body: TabBarView(
           children: [
-            fwork(), // Use the AllChannels widget directly
-            ftalent(), // Use the MyChannels widget directly
+            fwork(selectedCategory:widget.selectedCategory ,), // Use the AllChannels widget directly
+            ftalent(selectedCategory:widget.selectedCategory,), // Use the MyChannels widget directly
           ],
         ),
       ),

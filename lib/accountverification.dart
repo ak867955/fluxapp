@@ -2,80 +2,83 @@ import 'package:flutter/material.dart';
 import 'package:flux/verification.dart'; // Assuming verification.dart defines the verification UI
 import 'package:flux/workexperience.dart'; // Assuming workexperience.dart defines the work experience UI
 
-class acc extends StatelessWidget {
-  const acc({super.key});
+class acc extends StatefulWidget {
+  const acc({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context); // Use theme for consistent styling
+  State<acc> createState() => _accState();
+}
 
+class _accState extends State<acc> {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Verify Your Account"),
-        backgroundColor: theme.primaryColor, // Use theme color
+        title: Text(
+          "Verify Your Account",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Color.fromRGBO(8, 38, 76, 1),
         leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back_ios_new_outlined),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back,color: Colors.white,),
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView( // Wrap content in SingleChildScrollView for scrollable content
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(height: 10.0),
+            SizedBox(height: 16.0),
             Text(
               "Provide Identification",
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
             ),
-            const SizedBox(height: 10.0),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Help us verify your identity with a government-issued ID.",
-                ),
-                ElevatedButton(
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => verification()),
-                  ),
-                  child: const Text("Verify"),
-                ),
-              ],
+            SizedBox(height: 8.0),
+            Text(
+              "Help us verify your identity with a government-issued ID.",
+              style: TextStyle(fontSize: 16.0),
             ),
-            const SizedBox(height: 10.0),
+            SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => verification()),
+              ),
+              child: Text("Verify", style: TextStyle(fontSize: 16.0)),
+            ),
+            SizedBox(height: 24.0),
             Text(
               "Verify Work Experience",
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
             ),
-            const SizedBox(height: 10.0),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Share your work history and education.",
-                ),
-                ElevatedButton(
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => workex()),
-                  ),
-                  child: const Text("Verify"),
-                ),
-              ],
+            SizedBox(height: 8.0),
+            Text(
+              "Share your work history and education.",
+              style: TextStyle(fontSize: 16.0),
             ),
-            const SizedBox(height: 30.0),
+            SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => workex()),
+              ),
+              child: Text("Verify", style: TextStyle(fontSize: 16.0)),
+            ),
+            SizedBox(height: 30.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
                   onPressed: () => _showConfirmationDialog(context),
-                  child: const Text("Continue Later"),
+                  child: Text("Continue Later", style: TextStyle(fontSize: 16.0)),
                 ),
                 ElevatedButton(
                   onPressed: () => _showSuccessDialog(context),
-                  child: const Text("Done"),
+                  child: Text("Done", style: TextStyle(fontSize: 16.0)),
                 ),
               ],
             ),
@@ -90,16 +93,16 @@ class acc extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Confirmation'),
-          content: const Text('Are you sure you want to continue later?'),
+          title: Text('Confirmation', style: TextStyle(fontSize: 18.0)),
+          content: Text('Are you sure you want to continue later?', style: TextStyle(fontSize: 16.0)),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
+              child: Text('Cancel', style: TextStyle(fontSize: 16.0)),
             ),
             TextButton(
-              onPressed: () => Navigator.popUntil(context, (route) => route.isFirst), // Close dialog and pop all screens
-              child: const Text('Continue Later'),
+              onPressed: () => Navigator.popUntil(context, (route) => route.isFirst),
+              child: Text('Continue Later', style: TextStyle(fontSize: 16.0)),
             ),
           ],
         );
@@ -112,12 +115,12 @@ class acc extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Success'),
-          content: const Text('Your account verification is in progress.'),
+          title: Text('Success', style: TextStyle(fontSize: 18.0)),
+          content: Text('Your account verification is in progress.', style: TextStyle(fontSize: 16.0)),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
+              child: Text('OK', style: TextStyle(fontSize: 16.0)),
             ),
           ],
         );

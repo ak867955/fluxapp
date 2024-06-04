@@ -21,24 +21,30 @@ class _ChannelsState extends State<channels> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        drawer: drawer(),
+              drawer: drawer(
+        // firstName: "firstName",
+        // lastName: "lastName",
+        // email: "email",
+        // profileImagePath:
+        //     "imagePath", // Assuming imagePath is the path of the selected profile picture
+      ),
         appBar: AppBar(
           bottom: TabBar(
             tabs: [
               Tab(
-                child: Text("All Channels"),
+                child: Text("All Channels",style: TextStyle(color: Colors.white)),
               ),
               Tab(
-                child: Text("My Channels"),
+                child: Text("My Channels",style: TextStyle(color: Colors.white)),
               ),
             ],
           ),
-          title: Text("FLUX"),
+          title: Text("FLUX",style: TextStyle(color: Colors.white)),
           backgroundColor: Color.fromRGBO(8, 38, 76, 1),
           leading: Builder(
             builder: (context) => IconButton(
               onPressed: () => Scaffold.of(context).openDrawer(),
-              icon: Icon(Icons.menu),
+              icon: Icon(Icons.menu,color: Colors.white),
             ),
           ),
           actions: [
@@ -47,7 +53,7 @@ class _ChannelsState extends State<channels> {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => csearch()));
                 },
-                icon: Icon(Icons.search)),
+                icon: Icon(Icons.search,color: Colors.white)),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: CircleAvatar(
@@ -55,7 +61,7 @@ class _ChannelsState extends State<channels> {
                 child: InkWell(
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => mine()),
+                    MaterialPageRoute(builder: (context) => MyProfile()),
                   ),
                 ),
               ),

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class payment extends StatefulWidget {
   const payment({super.key});
@@ -10,118 +8,145 @@ class payment extends StatefulWidget {
 }
 
 class _paymentState extends State<payment> {
-  int payment = 0;
+  int _selectedPaymentMethod = 0;
+
   @override
   Widget build(BuildContext context) {
-    int paymentmethod = 0;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Pay"),
-        backgroundColor: Color.fromRGBO(8, 38, 76, 1),
-        leading: Icon(Icons.arrow_back),
+        title: const Text("Pay",style: TextStyle(color: Colors.white)),
+        backgroundColor: const Color.fromRGBO(8, 38, 76, 1),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back,color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          Container(
-            child: Column(
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20),
+            const Text(
+              "Amount",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                hintText: "Enter amount",
+              ),
+              keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              "Add a note",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                hintText: "Add a note",
+              ),
+              maxLines: 2,
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              "Choose Payment Method",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            const SizedBox(height: 10),
+            _buildPaymentMethodOption(
+              context,
+              1,
+              "Google Pay",
+              "Pay securely using Google Pay",
+            ),
+            _buildPaymentMethodOption(
+              context,
+              2,
+              "Amazon Pay",
+              "Pay securely using Amazon Pay",
+            ),
+            const SizedBox(height: 30),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 40),
+                  backgroundColor: const Color.fromRGBO(8, 38, 76, 1),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text(
+                  'Pay now',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPaymentMethodOption(BuildContext context, int value, String title, String subtitle) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedPaymentMethod = value;
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.all(16.0),
+        margin: const EdgeInsets.symmetric(vertical: 8.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(
+            color: _selectedPaymentMethod == value
+                ? const Color.fromRGBO(8, 38, 76, 1)
+                : Colors.grey.shade300,
+          ),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
               children: [
-                SizedBox(
-                  height: 20,
+                Radio(
+                  value: value,
+                  groupValue: _selectedPaymentMethod,
+                  onChanged: (int? newValue) {
+                    setState(() {
+                      _selectedPaymentMethod = newValue!;
+                    });
+                  },
+                  activeColor: const Color.fromRGBO(8, 38, 76, 1),
                 ),
+                const SizedBox(width: 10),
                 Text(
-                  "Amount",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  title,
+                  style: const TextStyle(fontSize: 16),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)))),
-                ),
-                Text(
-                  "Add a note",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)))),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Text("Choose Payment Method",
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                SizedBox(
-                  height: 10,
-                ),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Radio(
-                              value: 1,
-                              groupValue: payment,
-                              onChanged: (value) =>
-                                  setState(() => payment = value as int),
-                            ),
-                            // Image.asset(
-                            //   'asset/flux-high-resolution-logo-white-transparent.png',
-                            //   width: 40,
-                            //   height: 40,
-                            // ),
-                            Text("Google Pay"),
-                          ],
-                        ),
-                        Text("Pay securely using Google Pay")
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Radio(
-                                  value: 2,
-                                  groupValue: payment,
-                                  onChanged: (value) =>
-                                      setState(() => payment = value as int),
-                                ),
-                                // Image.asset(
-                                //   'asset/flux-high-resolution-logo-white-transparent.png',
-                                //   width: 40,
-                                //   height: 40,
-                                // ),
-                                Text("Amazon Pay"),
-                              ],
-                            ),
-                            Text("Pay securely using Amazon Pay"),
-                          ],
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-                ElevatedButton(onPressed: () {}, child: Text('Pay now'))
               ],
             ),
-          )
-        ],
+            Text(
+              subtitle,
+              style: const TextStyle(color: Colors.grey, fontSize: 8),
+            ),
+          ],
+        ),
       ),
     );
   }

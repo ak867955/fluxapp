@@ -10,12 +10,11 @@ class csearch extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("FLUX"),
+        title: Text("FLUX",style: TextStyle(color: Colors.white)),
         backgroundColor: Color.fromRGBO(8, 38, 76, 1),
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back_ios_new_outlined),
-        ),
+          icon: Icon(Icons.arrow_back,color: Colors.white)),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -24,7 +23,7 @@ class csearch extends StatelessWidget {
               child: InkWell(
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => myprofile()),
+                  MaterialPageRoute(builder: (context) => profile()),
                 ),
               ),
             ),
@@ -58,48 +57,48 @@ class csearch extends StatelessWidget {
                 description: "This is a sample work description.",
                 imageUrl: "asset/pexels-toa-heftiba-şinca-1194420.jpg",
                 onTap: () {
-                  switch (index) {
-                    case 0:
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => cchat()),
-                      );
-                      break;
-                      break;
-                    case 1:
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => cchat()),
-                      );
-                      break;
-                    case 2:
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => cchat()),
-                      );
-                      break;
-                    case 3:
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => cchat()),
-                      );
-                      break;
-                    case 4:
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => cchat()),
-                      );
-                      break;
-                    case 5:
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => cchat()),
-                      );
-                      break;
+                  // switch (index) {
+                  //   case 0:
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) => cchat()),
+                  //     );
+                  //     break;
+                  //     break;
+                  //   case 1:
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) => cchat()),
+                  //     );
+                  //     break;
+                  //   case 2:
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) => cchat()),
+                  //     );
+                  //     break;
+                  //   case 3:
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) => cchat()),
+                  //     );
+                  //     break;
+                  //   case 4:
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) => cchat()),
+                  //     );
+                  //     break;
+                  //   case 5:
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) => cchat()),
+                  //     );
+                  //     break;
 
-                    default:
-                    // Handle other cases (optional)
-                  }
+                  //   default:
+                  //   // Handle other cases (optional)
+                  // }
                 },
               ),
             ),
