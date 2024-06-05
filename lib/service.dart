@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flux/Electrician.dart';
+import 'package:flux/myposts.dart';
 import 'package:flux/channels.dart';
 import 'package:flux/chat.dart';
 import 'package:flux/cleaning.dart';
@@ -184,13 +184,17 @@ class service extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                ptask()), // Replace with your ServicesPage widget
+                                PostService()), // Replace with your ServicesPage widget
                       );
                     },
                     style: ButtonStyle(
                         backgroundColor:
                             MaterialStateProperty.all(Colors.black)),
                     child: Text("Post Service")),
+                    // SizedBox(width: 5),
+                    TextButton(onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => MyPosts()));
+                    }, child: Text("My Posts"))
               ],
             ),
             SizedBox(height: 15),

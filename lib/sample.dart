@@ -1,79 +1,121 @@
 // import 'package:flutter/material.dart';
+// import 'package:flux/collection/collection.dart';
+// import 'package:flux/collection/servicemodel.dart';
+// import 'package:flutter/services.dart';
 
-// void main() {
-//   runApp(KonnectApp());
-// }
+// class ptask extends StatefulWidget {
+//   const ptask({super.key});
 
-// class KonnectApp extends StatelessWidget {
 //   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Konnect',
-//       theme: ThemeData(
-//         primarySwatch: Colors.green,
-//       ),
-//       home: KonnectPage(),
-//     );
-//   }
+//   State<ptask> createState() => _ptaskState();
 // }
 
-// class KonnectPage extends StatelessWidget {
+// class _ptaskState extends State<ptask> {
+//   final titleController = TextEditingController();
+//   final descriptionController = TextEditingController();
+//   final priceController = TextEditingController();
+//   String selectedDuration = '1 Hour';
+//   String selectedCategory = 'Plumbing';
+  
+//   final List<String> durations = [
+//     '1 Hour',
+//     '2 Hours',
+//     '4 Hours',
+//     'Less than 24 Hours',
+//   ];
+
+//   final List<String> categories = [
+//     "Plumbing",
+//     "Electrician",
+//     "Taxi",
+//     "Courier",
+//     "Food Delivery",
+//     "Cleaning",
+//   ];
+
+//   @override
+//   void dispose() {
+//     // Dispose controllers when the widget is removed from the widget tree
+//     titleController.dispose();
+//     descriptionController.dispose();
+//     priceController.dispose();
+//     super.dispose();
+//   }
+
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
-//       body: Center(
-//         child: Container(
-//           padding: EdgeInsets.symmetric(horizontal: 24),
-//           decoration: BoxDecoration(
-//             gradient: LinearGradient(
-//               colors: [Colors.white, Colors.grey[200]!],
-//               begin: Alignment.topCenter,
-//               end: Alignment.bottomCenter,
-//             ),
-//           ),
+//       appBar: AppBar(
+//         title: Text("Post Service", style: TextStyle(color: Colors.white)),
+//         backgroundColor: Color.fromRGBO(8, 38, 76, 1),
+//         leading: IconButton(
+//           onPressed: () {
+//             Navigator.pop(context);
+//           },
+//           icon: Icon(Icons.arrow_back, color: Colors.white),
+//         ),
+//         centerTitle: true,
+//       ),
+//       body: SingleChildScrollView(
+//         child: Padding(
+//           padding: const EdgeInsets.all(20.0),
 //           child: Column(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: <Widget>[
-//               Text(
-//                 'Welcome to',
-//                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               SizedBox(height: 10),
+//               _buildSectionTitle("Title"),
+//               _buildTextField("Enter Title",
+//                   maxLength: 50, controller: titleController),
+//               SizedBox(height: 20),
+//               _buildSectionTitle("Description"),
+//               _buildTextField("Enter Description",
+//                   maxLength: 200, controller: descriptionController),
+//               SizedBox(height: 20),
+//               Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                 children: [
+//                   _buildPriceField(
+//                       label: "Price",
+//                       hintText: "Enter Your Price",
+//                       controller: priceController),
+//                   SizedBox(width: 5),
+//                   _buildDropdownField(
+//                       label: "Duration", items: durations, value: selectedDuration),
+//                 ],
 //               ),
-//               Text(
-//                 'Konnect',
-//                 style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.purple),
-//               ),
-//               SizedBox(height: 16),
-//               CircleAvatar(
-//                 radius: 50,
-//                 backgroundImage: NetworkImage('https://via.placeholder.com/100'), // replace with actual image URL
-//               ),
-//               SizedBox(height: 8),
-//               Text(
-//                 'Nick Manson',
-//                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
-//               ),
-//               SizedBox(height: 8),
-//               Text(
-//                 'nickmanson@konnect.com',
-//                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Colors.grey[600]),
-//               ),
-//               SizedBox(height: 24),
-//               GenderSelection(),
-//               SizedBox(height: 24),
-//               ElevatedButton(
-//                 onPressed: () {
-//                   // Connect button action
-//                 },
-//                 style: ElevatedButton.styleFrom(
-//                   padding: EdgeInsets.symmetric(horizontal: 48, vertical: 12),
-//                   shape: RoundedRectangleBorder(
-//                     borderRadius: BorderRadius.circular(24.0),
+//               SizedBox(height: 20),
+//               _buildDropdownField(
+//                   label: "Category", items: categories, value: selectedCategory),
+//               SizedBox(height: 20),
+//               Center(
+//                 child: ElevatedButton.icon(
+//                   onPressed: () {},
+//                   icon: Icon(Icons.file_copy, color: Colors.white),
+//                   label: Text("Add Files"),
+//                   style: ElevatedButton.styleFrom(
+//                     backgroundColor: Color.fromRGBO(8, 38, 76, 1),
+//                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+//                     textStyle: TextStyle(fontSize: 16),
 //                   ),
-//                   backgroundColor: Colors.green,
 //                 ),
-//                 child: Text(
-//                   'Connect',
-//                   style: TextStyle(fontSize: 16),
+//               ),
+//               SizedBox(height: 30),
+//               Center(
+//                 child: ElevatedButton(
+//                   onPressed: () async {
+//                     await Controller().postservice(Servicemodel(
+//                         title: titleController.text,
+//                         description: descriptionController.text,
+//                         price: double.parse(priceController.text),
+//                         duration: _getDurationInHours(selectedDuration),
+//                         category: selectedCategory));
+//                   },
+//                   child: Text("Post Service"),
+//                   style: ElevatedButton.styleFrom(
+//                     backgroundColor: Color.fromRGBO(8, 38, 76, 1),
+//                     padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+//                     textStyle: TextStyle(fontSize: 18),
+//                   ),
 //                 ),
 //               ),
 //             ],
@@ -82,80 +124,97 @@
 //       ),
 //     );
 //   }
-// }
 
-// class GenderSelection extends StatefulWidget {
-//   @override
-//   _GenderSelectionState createState() => _GenderSelectionState();
-// }
-
-// class _GenderSelectionState extends State<GenderSelection> {
-//   String? selectedGender;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       mainAxisAlignment: MainAxisAlignment.center,
-//       children: <Widget>[
-//         GestureDetector(
-//           onTap: () {
-//             setState(() {
-//               selectedGender = 'Male';
-//             });
-//           },
-//           child: GenderOption(
-//             icon: Icons.male,
-//             label: 'Male',
-//             isSelected: selectedGender == 'Male',
-//           ),
-//         ),
-//         SizedBox(width: 32),
-//         GestureDetector(
-//           onTap: () {
-//             setState(() {
-//               selectedGender = 'Female';
-//             });
-//           },
-//           child: GenderOption(
-//             icon: Icons.female,
-//             label: 'Female',
-//             isSelected: selectedGender == 'Female',
-//           ),
-//         ),
-//       ],
+//   Widget _buildSectionTitle(String title) {
+//     return Text(
+//       title,
+//       style: TextStyle(
+//           fontWeight: FontWeight.bold,
+//           fontSize: 18,
+//           color: Color.fromRGBO(8, 38, 76, 1)),
 //     );
 //   }
-// }
 
-// class GenderOption extends StatelessWidget {
-//   final IconData icon;
-//   final String label;
-//   final bool isSelected;
-
-//   const GenderOption({
-//     required this.icon,
-//     required this.label,
-//     required this.isSelected,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       children: <Widget>[
-//         Icon(
-//           icon,
-//           size: 48,
-//           color: isSelected ? Colors.blue : Colors.grey,
+//   Widget _buildTextField(String hintText,
+//       {int? maxLength, required TextEditingController controller}) {
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(vertical: 8.0),
+//       child: TextFormField(
+//         controller: controller,
+//         maxLength: maxLength,
+//         decoration: InputDecoration(
+//           border: OutlineInputBorder(),
+//           labelText: hintText,
+//           counterText: '',
+//           hintStyle: TextStyle(color: Colors.grey),
 //         ),
-//         Text(
-//           label,
-//           style: TextStyle(
-//             fontSize: 16,
-//             fontWeight: FontWeight.w600,
-//             color: isSelected ? Colors.blue : Colors.grey,
-//           ),
-//         ),
-//       ],
+//       ),
 //     );
+//   }
+
+//   Widget _buildPriceField(
+//       {required String label,
+//       required String hintText,
+//       required TextEditingController controller}) {
+//     return SizedBox(
+//       width: MediaQuery.of(context).size.width * 0.45, // Adjusted for padding
+//       child: TextFormField(
+//         controller: controller,
+//         keyboardType: TextInputType.number,
+//         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+//         decoration: InputDecoration(
+//           border: OutlineInputBorder(),
+//           labelText: label,
+//           hintText: hintText,
+//           counterText: '',
+//           hintStyle: TextStyle(color: Colors.grey),
+//         ),
+//       ),
+//     );
+//   }
+
+//   Widget _buildDropdownField(
+//       {required String label, required List<String> items, required String value}) {
+//     return SizedBox(
+//       width: MediaQuery.of(context).size.width * 0.45, // Adjusted for padding
+//       child: DropdownButtonFormField<String>(
+//         value: value,
+//         onChanged: (newValue) {
+//           setState(() {
+//             if (label == "Duration") {
+//               selectedDuration = newValue!;
+//             } else {
+//               selectedCategory = newValue!;
+//             }
+//           });
+//         },
+//         decoration: InputDecoration(
+//           border: OutlineInputBorder(),
+//           labelText: label,
+//           hintText: label,
+//         ),
+//         items: items.map<DropdownMenuItem<String>>((String value) {
+//           return DropdownMenuItem<String>(
+//             value: value,
+//             child: Text(value),
+//           );
+//         }).toList(),
+//       ),
+//     );
+//   }
+
+//   int _getDurationInHours(String duration) {
+//     switch (duration) {
+//       case '1 Hour':
+//         return 1;
+//       case '2 Hours':
+//         return 2;
+//       case '4 Hours':
+//         return 4;
+//       case 'Less than 24 Hours':
+//         return 24;
+//       default:
+//         return 0;
+//     }
 //   }
 // }

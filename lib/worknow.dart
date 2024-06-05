@@ -29,8 +29,8 @@ class _worknowState extends State<worknow> {
     "asset/pexels-toa-heftiba-şinca-1194420.jpg",
     "asset/pexels-toa-heftiba-şinca-1194420.jpg",
     "asset/pexels-toa-heftiba-şinca-1194420.jpg",
-    "asset/pexels-toa-heftiba-şinca-1194420.jpg",
-    "asset/pexels-toa-heftiba-şinca-1194420.jpg",
+    "asset/Rectangle 73.png",
+    "asset/medium-shot-man-wearing-vr-glasses.jpg",
     "asset/pexels-toa-heftiba-şinca-1194420.jpg",
   ];
 

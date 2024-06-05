@@ -3,23 +3,34 @@ import 'package:flux/collection/collection.dart';
 import 'package:flux/collection/servicemodel.dart';
 import 'package:flutter/services.dart';
 
-class ptask extends StatefulWidget {
-  const ptask({super.key});
+class PostService extends StatefulWidget {
+  const PostService({super.key});
 
   @override
-  State<ptask> createState() => _ptaskState();
+  State<PostService> createState() => _PostServiceState();
 }
-
-class _ptaskState extends State<ptask> {
+ 
+class _PostServiceState extends State<PostService> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
   final priceController = TextEditingController();
   String selectedDuration = '1 Hour';
+  String selectedCategory = 'Plumbing';
+  
   final List<String> durations = [
     '1 Hour',
     '2 Hours',
     '4 Hours',
     'Less than 24 Hours',
+  ];
+
+  final List<String> categories = [
+    "Plumbing",
+    "Electrician",
+    "Taxi",
+    "Courier",
+    "Food Delivery",
+    "Cleaning",
   ];
 
   @override
@@ -65,13 +76,16 @@ class _ptaskState extends State<ptask> {
                 children: [
                   _buildPriceField(
                       label: "Price",
-                      hintText: "Enter Your Prize",
+                      hintText: "Enter Your Price",
                       controller: priceController),
-                      SizedBox(width: 5),
+                  SizedBox(width: 5),
                   _buildDropdownField(
                       label: "Duration", items: durations, value: selectedDuration),
                 ],
               ),
+              SizedBox(height: 20),
+              _buildDropdownField(
+                  label: "Category", items: categories, value: selectedCategory),
               SizedBox(height: 20),
               Center(
                 child: ElevatedButton.icon(
@@ -93,7 +107,8 @@ class _ptaskState extends State<ptask> {
                         title: titleController.text,
                         description: descriptionController.text,
                         price: double.parse(priceController.text),
-                        duration: _getDurationInHours(selectedDuration)));
+                        duration: _getDurationInHours(selectedDuration),
+                        category: selectedCategory));
                   },
                   child: Text("Post Service"),
                   style: ElevatedButton.styleFrom(
@@ -142,8 +157,7 @@ class _ptaskState extends State<ptask> {
       required String hintText,
       required TextEditingController controller}) {
     return SizedBox(
-      width:
-          MediaQuery.of(context).size.width*.240 , // Adjusted for padding
+      width:  MediaQuery.of(context).size.width*.350 ,
       child: TextFormField(
         controller: controller,
         keyboardType: TextInputType.number,
@@ -161,14 +175,17 @@ class _ptaskState extends State<ptask> {
 
   Widget _buildDropdownField(
       {required String label, required List<String> items, required String value}) {
-    return Expanded(
-      // width:
-      //     MediaQuery.of(context).size.width *.350, // Adjusted for padding
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.5,
       child: DropdownButtonFormField<String>(
         value: value,
         onChanged: (newValue) {
           setState(() {
-            selectedDuration = newValue!;
+            if (label == "Duration") { 
+              selectedDuration = newValue!;
+            } else {
+              selectedCategory = newValue!;
+            }
           });
         },
         decoration: InputDecoration(
