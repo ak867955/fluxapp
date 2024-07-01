@@ -5,13 +5,13 @@ class wworks extends StatelessWidget {
   wworks({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return Scaffold(
       body: Column(
         children: [
           SizedBox(height: 10),
           Expanded(
-            // Allow GridView to expand within available space
+            // Allow GridView to expand within available space 
             child: GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2, // Two columns
@@ -27,7 +27,7 @@ class wworks extends StatelessWidget {
               ),
             ),
           )
-        ],
+        ], 
       ),
     );
   }

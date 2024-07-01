@@ -1,26 +1,28 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flux/collection/collection.dart';
-import 'package:flux/collection/postworkmodel.dart';
+import 'package:flux/model/collection.dart';
+import 'package:flux/model/postworkmodel.dart';
 import 'package:flux/data/worknow_controller.dart';
 import 'package:flux/flux.dart'; // Import the chat page
+import 'package:image_picker/image_picker.dart';
 
-class pwork extends StatefulWidget {
-  const pwork({super.key});
+class PostWorkPage extends StatefulWidget {
+  const PostWorkPage({Key? key}) : super(key: key);
 
   @override
-  _pworkState createState() => _pworkState();
+  _PostWorkPageState createState() => _PostWorkPageState();
 }
 
-class _pworkState extends State<pwork> {
+class _PostWorkPageState extends State<PostWorkPage> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
   final budgetController = TextEditingController();
-  final skillController = TextEditingController();
-
+  final skillController = TextEditingController(); 
   String? selectedCategory;
   String? selectedLevel;
   String? selectedDeadline;
   String? selectedSubCategory;
+  File? _profileImage;
 
   final List<String> profileSections = [
     'Title',
@@ -57,6 +59,9 @@ class _pworkState extends State<pwork> {
 
   List<String> selectedSubCategoryList = [];
 
+  final _formKey = GlobalKey<FormState>();
+  final picker = ImagePicker();
+
   @override
   void dispose() {
     titleController.dispose();
@@ -66,7 +71,6 @@ class _pworkState extends State<pwork> {
     super.dispose();
   }
 
-  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,6 +99,35 @@ class _pworkState extends State<pwork> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Center(
+                  child: Stack(
+                    children: [
+                      _profileImage != null
+                          ? CircleAvatar( 
+                              radius: 50,
+                              backgroundImage: FileImage(_profileImage!),
+                            )
+                          : CircleAvatar(
+                              radius: 50,
+                              backgroundImage:
+                                  AssetImage("assets/profile_placeholder.png"),
+                            ),
+                      Positioned(
+                        bottom: 5.0,
+                        right: 5.0,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.grey[200],
+                          radius: 15,
+                          child: IconButton(
+                            icon: const Icon(Icons.edit, size: 15),
+                            color: Colors.blue,
+                            onPressed: _getImage,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 const SizedBox(height: 10),
                 ListView.builder(
                   shrinkWrap: true,
@@ -117,7 +150,7 @@ class _pworkState extends State<pwork> {
                             DropdownButtonFormField<String>(
                               validator: (value) {
                                 if (value == null) {
-                                  return "Feild is required";
+                                  return "Field is required";
                                 } else {
                                   return null;
                                 }
@@ -131,51 +164,33 @@ class _pworkState extends State<pwork> {
                               }).toList(),
                               onChanged: (newValue) {
                                 setState(() {
-                                  // 'Graphic & Design',
-                                  // 'Digital Marketing',
-                                  // 'Writing & Translation',
-                                  // 'Video & Animation',
-                                  // 'Technology',
-                                  // 'Gaming',
                                   selectedCategory = newValue;
                                   switch (selectedCategory) {
                                     case 'Graphic & Design':
-                                      {
-                                        selectedSubCategoryList =
-                                            WorkNowController.grephiscDesign;
-                                        break;
-                                      }
+                                      selectedSubCategoryList =
+                                          WorkNowController.grephiscDesign;
+                                      break;
                                     case 'Digital Marketing':
-                                      {
-                                        selectedSubCategoryList =
-                                            WorkNowController.digitalmarketing;
-                                        break;
-                                      }
+                                      selectedSubCategoryList =
+                                          WorkNowController.digitalmarketing;
+                                      break;
                                     case 'Writing & Translation':
-                                      {
-                                        selectedSubCategoryList =
-                                            WorkNowController
-                                                .writingandtranslation;
-                                        break;
-                                      }
+                                      selectedSubCategoryList =
+                                          WorkNowController
+                                              .writingandtranslation;
+                                      break;
                                     case 'Video & Animation':
-                                      {
-                                        selectedSubCategoryList =
-                                            WorkNowController.videoandanimation;
-                                        break;
-                                      }
+                                      selectedSubCategoryList =
+                                          WorkNowController.videoandanimation;
+                                      break;
                                     case 'Technology':
-                                      {
-                                        selectedSubCategoryList =
-                                            WorkNowController.technology;
-                                        break;
-                                      }
+                                      selectedSubCategoryList =
+                                          WorkNowController.technology;
+                                      break;
                                     case 'Gaming':
-                                      {
-                                        selectedSubCategoryList =
-                                            WorkNowController.gaming;
-                                        break;
-                                      }
+                                      selectedSubCategoryList =
+                                          WorkNowController.gaming;
+                                      break;
                                   }
                                 });
                               },
@@ -185,11 +200,11 @@ class _pworkState extends State<pwork> {
                                 fillColor: Colors.grey[100],
                               ),
                             )
-                          else if (section == 'Level') 
+                          else if (section == 'Level')
                             DropdownButtonFormField<String>(
                               validator: (value) {
                                 if (value == null) {
-                                  return "Feild is required";
+                                  return "Field is required";
                                 } else {
                                   return null;
                                 }
@@ -216,7 +231,7 @@ class _pworkState extends State<pwork> {
                             DropdownButtonFormField<String>(
                               validator: (value) {
                                 if (value == null) {
-                                  return "Feild is required";
+                                  return "Field is required";
                                 } else {
                                   return null;
                                 }
@@ -243,7 +258,7 @@ class _pworkState extends State<pwork> {
                             DropdownButtonFormField<String>(
                               validator: (value) {
                                 if (value == null) {
-                                  return "Feild is required";
+                                  return "Field is required";
                                 } else {
                                   return null;
                                 }
@@ -269,8 +284,8 @@ class _pworkState extends State<pwork> {
                           else
                             TextFormField(
                               validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "Feild is required";
+                                                                if (value!.isEmpty) {
+                                  return "Field is required";
                                 } else {
                                   return null;
                                 }
@@ -301,19 +316,18 @@ class _pworkState extends State<pwork> {
                             deadline: _parseDeadline(selectedDeadline),
                             skills: skillController.text,
                             category: selectedCategory ?? '',
-                            level: selectedLevel ?? ''));
-                        // Show Snackbar
+                            level: selectedLevel ?? '',
+                            profileImage: _profileImage?.path));
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Work Posted Successfully'),
                           ),
                         );
-                        // Navigate to Chat Page
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  const bottomnavipage(initialIndex: 0)),
+                                  const bottomnavipage(initialIndex: 2)),
                         );
                       }
                     },
@@ -363,4 +377,14 @@ class _pworkState extends State<pwork> {
         return 0;
     }
   }
+
+  Future<void> _getImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _profileImage = File(pickedFile.path);
+      });
+    }
+  }
 }
+

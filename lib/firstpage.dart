@@ -34,7 +34,7 @@ class _page1State extends State<page1> {
               children: [
                 // Image positioned at top with specified height
                 Image.asset(
-                  "asset/Designer.png",
+                  "asset/Colorful Modern Infinity Technology Free Logo 1.png",
                   height: MediaQuery.of(context).size.height *
                       1, // Set image height to match container
                   fit: BoxFit.cover, // Ensure image covers the container

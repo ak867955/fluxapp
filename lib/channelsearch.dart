@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flux/channelchat.dart';
-import 'package:flux/findwork.dart';
+import 'package:flux/myworks.dart';
 import 'package:flux/profile.dart'; // Assuming panveri.dart is your target screen
 
 class csearch extends StatelessWidget {
@@ -15,20 +15,20 @@ class csearch extends StatelessWidget {
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
           icon: Icon(Icons.arrow_back,color: Colors.white)),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CircleAvatar(
-              backgroundImage: AssetImage("asset/Ellipse 22.png"),
-              child: InkWell(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => profile()),
-                ),
-              ),
-            ),
-          )
-        ],
+        // actions: [
+        //   Padding(
+        //     padding: const EdgeInsets.all(8.0),
+        //     child: CircleAvatar(
+        //       backgroundImage: AssetImage("asset/Ellipse 22.png"),
+        //       child: InkWell(
+        //         onTap: () => Navigator.push(
+        //           context,
+        //           MaterialPageRoute(builder: (context) => ChatOpponentProfile()),
+        //         ),
+        //       ),
+        //     ),
+        //   )
+        // ],
       ),
       body: Column(
         children: [

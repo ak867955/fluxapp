@@ -13,7 +13,7 @@ class _accState extends State<acc> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppBar( 
         title: Text(
           "Verify Your Account",
           style: TextStyle(color: Colors.white),
@@ -46,7 +46,7 @@ class _accState extends State<acc> {
             ElevatedButton(
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => verification()),
+                MaterialPageRoute(builder: (context) => VerificationScreen()),
               ),
               child: Text("Verify", style: TextStyle(fontSize: 16.0)),
             ),
@@ -64,7 +64,7 @@ class _accState extends State<acc> {
             ElevatedButton(
               onPressed: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => workex()),
+                MaterialPageRoute(builder: (context) => WorkExperience()),
               ),
               child: Text("Verify", style: TextStyle(fontSize: 16.0)),
             ),

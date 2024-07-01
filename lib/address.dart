@@ -1,59 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flux/chatpage.dart';
-import 'package:flux/collection/addressmodel.dart';
-import 'package:flux/collection/collection.dart';
+import 'package:flux/model/addressmodel.dart';
+import 'package:flux/model/collection.dart';
+import 'package:flux/flux.dart';
 
-class address extends StatefulWidget {
-  const address({super.key});
+class AddressVerification extends StatefulWidget {
+  const AddressVerification({super.key});
 
   @override
-  State<address> createState() => _addressState();
+  State<AddressVerification> createState() => _AddressVerificationState(); 
 }
 
-class _addressState extends State<address> {
+class _AddressVerificationState extends State<AddressVerification> {
   final housenameController = TextEditingController();
   final cityController = TextEditingController();
   final pincodeController = TextEditingController();
   String? selectedState;
 
-  final List<String> states = [
-    'Andhra Pradesh',
-    'Arunachal Pradesh',
-    'Assam',
-    'Bihar',
-    'Chhattisgarh',
-    'Goa',
-    'Gujarat',
-    'Haryana',
-    'Himachal Pradesh',
-    'Jharkhand',
-    'Karnataka',
-    'Kerala',
-    'Madhya Pradesh',
-    'Maharashtra',
-    'Manipur',
-    'Meghalaya',
-    'Mizoram',
-    'Nagaland',
-    'Odisha',
-    'Punjab',
-    'Rajasthan',
-    'Sikkim',
-    'Tamil Nadu',
-    'Telangana',
-    'Tripura',
-    'Uttar Pradesh',
-    'Uttarakhand',
-    'West Bengal',
-    'Andaman and Nicobar Islands',
-    'Chandigarh',
-    'Dadra and Nagar Haveli and Daman and Diu',
-    'Lakshadweep',
-    'Delhi',
-    'Puducherry',
-    'Ladakh',
-    'Jammu and Kashmir'
+  final List<String> districts = [
+  'Alappuzha',
+  'Ernakulam',
+  'Idukki',
+  'Kannur',
+  'Kasaragod',
+  'Kollam',
+  'Kottayam',
+  'Kozhikode',
+  'Malappuram',
+  'Palakkad',
+  'Pathanamthitta',
+  'Thiruvananthapuram',
+  'Thrissur',
+  'Wayanad',
   ];
 
   @override
@@ -82,7 +61,7 @@ class _addressState extends State<address> {
         padding: const EdgeInsets.all(15.0),
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start, 
             children: [
               Text(
                 "Get verified to access all features",
@@ -134,10 +113,10 @@ class _addressState extends State<address> {
                 value: selectedState,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: "State/Province",
+                  labelText: "District",
                   prefixIcon: Icon(Icons.map),
                 ),
-                items: states.map((String state) {
+                items: districts.map((String state) {
                   return DropdownMenuItem<String>(
                     value: state,
                     child: Text(state),
@@ -167,7 +146,7 @@ class _addressState extends State<address> {
                       await Controller().addaddress(Addressmodel(
                         housename: housenameController.text,
                         city: cityController.text,
-                        state: selectedState!,
+                        districts: selectedState!,
                         pincode: int.parse(pincodeController.text),
                       ));
                       showDialog(
@@ -179,12 +158,7 @@ class _addressState extends State<address> {
                             actions: [
                               TextButton(
                                 onPressed: () {
-                                  Navigator.of(context).pop();
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //       builder: (context) => ChatPage()),
-                                  // );
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => bottomnavipage(initialIndex: 0)));
                                 },
                                 child: Text("OK"),
                               ),

@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flux/accountverification.dart';
-import 'package:flux/collection/myprofilemodel.dart';
+import 'package:flux/channelmenu.dart';
+import 'package:flux/firstpage.dart';
+import 'package:flux/model/addressmodel.dart';
+import 'package:flux/model/myprofilemodel.dart';
 import 'package:flux/myprofile.dart';
 import 'package:flux/profile.dart';
 import 'package:flux/createprofile.dart';
@@ -11,7 +14,7 @@ import 'package:flux/settings.dart';
 import 'package:flux/verification.dart';
 
 class drawer extends StatefulWidget {
-  const drawer({super.key});
+  const drawer({Key? key});
 
   @override
   State<drawer> createState() => _drawerState();
@@ -19,6 +22,8 @@ class drawer extends StatefulWidget {
 
 class _drawerState extends State<drawer> {
   Myprofilemodel? currentUserModel;
+  Addressmodel? currentAddressModel;
+
   Future<Myprofilemodel?> fetchData() async {
     final snapshot = await FirebaseFirestore.instance
         .collection("Profile Info")
@@ -57,8 +62,8 @@ class _drawerState extends State<drawer> {
                 ),
               ),
               ListTile(
-                onTap: () => Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (context) => MyProfile())),
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MyProfile())),
                 leading: Icon(
                   Icons.person,
                   color: Colors.black,
@@ -70,8 +75,12 @@ class _drawerState extends State<drawer> {
                 textColor: Colors.black,
               ),
               ListTile(
-                onTap: () => Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (context) => settings())),
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SettingsPage(
+                            user: currentUserModel,
+                            address: currentAddressModel))),
                 leading: Icon(
                   Icons.settings,
                   color: Colors.black,
@@ -83,40 +92,14 @@ class _drawerState extends State<drawer> {
                 textColor: Colors.black,
               ),
               ListTile(
-                onTap: () => Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (context) => smess())),
-                leading: Icon(
-                  Icons.save_rounded,
-                  color: Colors.black,
-                ),
-                title: Text(
-                  "Saved Messages",
-                  style: TextStyle(fontSize: 18),
-                ),
-                textColor: Colors.black,
-              ),
-              ListTile(
-                onTap: () => Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (context) => verification())),
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => VerificationScreen())),
                 leading: Icon(
                   Icons.verified,
                   color: Colors.black,
                 ),
                 title: Text(
                   "My KYC",
-                  style: TextStyle(fontSize: 18),
-                ),
-                textColor: Colors.black,
-              ),
-              ListTile(
-                onTap: () => Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (context) => acc())),
-                leading: Icon(
-                  Icons.work,
-                  color: Colors.black,
-                ),
-                title: Text(
-                  "Work Now",
                   style: TextStyle(fontSize: 18),
                 ),
                 textColor: Colors.black,
@@ -137,9 +120,17 @@ class _drawerState extends State<drawer> {
                             child: Text("Cancel"),
                           ),
                           TextButton(
-                            onPressed: () {
-                              FirebaseAuth.instance.signOut();
-                              Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+                            onPressed: () async {
+                              await FirebaseAuth.instance
+                                  .signOut()
+                                  .then((value) {
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => page1(),
+                                    ),
+                                    (route) => false);
+                              });
                             },
                             child: Text("Log Out"),
                           ),

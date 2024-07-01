@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flux/collection/collection.dart';
-import 'package:flux/collection/contestmodel.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flux/model/contestmodel.dart';
 
 class pcont extends StatefulWidget {
   const pcont({super.key});
@@ -20,7 +20,7 @@ class _pcontState extends State<pcont> {
   List<String> skills = [
     'Graphic design',
     'Branding',
-    'Illustration',
+    'Illustration', 
     'Logo Design'
   ];
 
@@ -38,7 +38,7 @@ class _pcontState extends State<pcont> {
         title: Text("Post Contest", style: TextStyle(color: Colors.white)),
         backgroundColor: Color.fromRGBO(8, 38, 76, 1),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new_outlined, color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -76,13 +76,21 @@ class _pcontState extends State<pcont> {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
-                  await Controller().postcontest(Contestmodel(
+                  var docRef = FirebaseFirestore.instance.collection('Contests').doc();
+                  var contest = Contestmodel(
                     title: titlecontroller.text,
                     description: descriptioncontroller.text,
                     budget: double.parse(budgetcontroller.text),
                     skill: selectedSkill,
                     deadline: selectedDays,
-                  ));
+                    // workId: docRef.id,
+                    timestamp: Timestamp.now(),
+                    // uid: null, // Add the current user ID if available
+                    save: '',
+                  );
+                  await docRef.set(contest.data(docRef.id));
+                  _showSnackBar(context, "Contest Successfully Posted!");
+                  Navigator.pop(context);
                 },
                 child: Text("Post Your Contest"),
                 style: ElevatedButton.styleFrom(
@@ -171,5 +179,10 @@ class _pcontState extends State<pcont> {
         ),
       ],
     );
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(content: Text(message));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }

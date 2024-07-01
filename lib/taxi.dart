@@ -114,7 +114,7 @@ class taxi extends StatelessWidget {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => call()));
+                                        builder: (context) => CallPage()));
                               },
                               icon: Icon(Icons.call),
                               label: Text("Call"),

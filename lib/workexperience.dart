@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flux/chat.dart';
-import 'package:flux/collection/collection.dart';
-import 'package:flux/collection/workmodel.dart';
+// import 'package:file_picker/file_picker.dart';
+import 'package:flux/model/collection.dart';
+import 'package:flux/model/workmodel.dart';
+import 'package:flux/flux.dart';
 
-class workex extends StatefulWidget {
-  const workex({super.key});
+class WorkExperience extends StatefulWidget {
+  const WorkExperience({super.key});
 
   @override
-  State<workex> createState() => _workexState();
-}
+  State<WorkExperience> createState() => _WorkExperienceState();
+} 
 
-class _workexState extends State<workex> {
+class _WorkExperienceState extends State<WorkExperience> {
   final _formKey = GlobalKey<FormState>();
-  final nameController = TextEditingController();
+  final nameController = TextEditingController(); 
   final companyController = TextEditingController();
   final jobDescriptionController = TextEditingController();
   final referenceController = TextEditingController();
@@ -127,7 +128,7 @@ class _workexState extends State<workex> {
                     ElevatedButton(
                       onPressed: () {
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Chat()));
+                            MaterialPageRoute(builder: (context) => bottomnavipage(initialIndex: 0)));
                       },
                       child: Text("Continue Later"),
                       style: ElevatedButton.styleFrom(
@@ -137,7 +138,7 @@ class _workexState extends State<workex> {
                         textStyle: TextStyle(fontSize: 16),
                       ),
                     ),
-                    ElevatedButton(
+                    ElevatedButton( 
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           try {
@@ -160,7 +161,7 @@ class _workexState extends State<workex> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) => Chat()),
+                                              builder: (context) => bottomnavipage(initialIndex: 0)),
                                         );
                                       },
                                       child: Text("OK"),

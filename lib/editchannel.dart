@@ -18,7 +18,7 @@ class edchannel extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0), 
             child: Column(
               children: [
                 Container(

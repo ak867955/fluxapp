@@ -1,220 +1,234 @@
+// import 'dart:io';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:flutter/material.dart';
-// import 'package:flux/collection/collection.dart';
-// import 'package:flux/collection/servicemodel.dart';
-// import 'package:flutter/services.dart';
+// import 'package:flux/model/postworkmodel.dart';
+// import 'package:flux/data/worknow_controller.dart';
 
-// class ptask extends StatefulWidget {
-//   const ptask({super.key});
+// class MyWorks extends StatefulWidget {
+//   final String selectedCategory;
+//   const MyWorks({super.key, required this.selectedCategory});
 
 //   @override
-//   State<ptask> createState() => _ptaskState();
+//   State<MyWorks> createState() => _MyWorksState();
 // }
 
-// class _ptaskState extends State<ptask> {
-//   final titleController = TextEditingController();
-//   final descriptionController = TextEditingController();
-//   final priceController = TextEditingController();
-//   String selectedDuration = '1 Hour';
-//   String selectedCategory = 'Plumbing';
-  
-//   final List<String> durations = [
-//     '1 Hour',
-//     '2 Hours',
-//     '4 Hours',
-//     'Less than 24 Hours',
-//   ];
-
-//   final List<String> categories = [
-//     "Plumbing",
-//     "Electrician",
-//     "Taxi",
-//     "Courier",
-//     "Food Delivery",
-//     "Cleaning",
-//   ];
+// class _MyWorksState extends State<MyWorks> {
+//   String? selectedOption;
+//   List<String> selectedCategoryList = [];
 
 //   @override
-//   void dispose() {
-//     // Dispose controllers when the widget is removed from the widget tree
-//     titleController.dispose();
-//     descriptionController.dispose();
-//     priceController.dispose();
-//     super.dispose();
+//   void initState() {
+//     super.initState();
+//     selectFrom(widget.selectedCategory);
+//   }
+
+//   void selectFrom(String selectedCategory) {
+//     switch (selectedCategory) {
+//       case 'Graphic & Design':
+//         selectedCategoryList = WorkNowController.grephiscDesign;
+//         break;
+//       case 'Digital Marketing':
+//         selectedCategoryList = WorkNowController.digitalmarketing;
+//         break;
+//       case 'Writing & Translation':
+//         selectedCategoryList = WorkNowController.writingandtranslation;
+//         break;
+//       case 'Video & Animation':
+//         selectedCategoryList = WorkNowController.videoandanimation;
+//         break;
+//       case 'Technology':
+//         selectedCategoryList = WorkNowController.technology;
+//         break;
+//       case 'Gaming':
+//         selectedCategoryList = WorkNowController.gaming;
+//         break;
+//       default:
+//         selectedCategoryList = [];
+//         break;
+//     }
 //   }
 
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
 //       appBar: AppBar(
-//         title: Text("Post Service", style: TextStyle(color: Colors.white)),
-//         backgroundColor: Color.fromRGBO(8, 38, 76, 1),
-//         leading: IconButton(
-//           onPressed: () {
-//             Navigator.pop(context);
-//           },
-//           icon: Icon(Icons.arrow_back, color: Colors.white),
-//         ),
+//         title: const Text("My Works", style: TextStyle(color: Colors.white)),
+//         backgroundColor: const Color.fromRGBO(8, 38, 76, 1),
 //         centerTitle: true,
 //       ),
-//       body: SingleChildScrollView(
-//         child: Padding(
-//           padding: const EdgeInsets.all(20.0),
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               SizedBox(height: 10),
-//               _buildSectionTitle("Title"),
-//               _buildTextField("Enter Title",
-//                   maxLength: 50, controller: titleController),
-//               SizedBox(height: 20),
-//               _buildSectionTitle("Description"),
-//               _buildTextField("Enter Description",
-//                   maxLength: 200, controller: descriptionController),
-//               SizedBox(height: 20),
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                 children: [
-//                   _buildPriceField(
-//                       label: "Price",
-//                       hintText: "Enter Your Price",
-//                       controller: priceController),
-//                   SizedBox(width: 5),
-//                   _buildDropdownField(
-//                       label: "Duration", items: durations, value: selectedDuration),
-//                 ],
-//               ),
-//               SizedBox(height: 20),
-//               _buildDropdownField(
-//                   label: "Category", items: categories, value: selectedCategory),
-//               SizedBox(height: 20),
-//               Center(
-//                 child: ElevatedButton.icon(
-//                   onPressed: () {},
-//                   icon: Icon(Icons.file_copy, color: Colors.white),
-//                   label: Text("Add Files"),
-//                   style: ElevatedButton.styleFrom(
-//                     backgroundColor: Color.fromRGBO(8, 38, 76, 1),
-//                     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-//                     textStyle: TextStyle(fontSize: 16),
-//                   ),
+//       body: Padding(
+//         padding: const EdgeInsets.all(16.0),
+//         child: Column(
+//           children: [
+//             const SizedBox(height: 10),
+//             DropdownButtonFormField<String>(
+//               value: selectedOption,
+//               decoration: InputDecoration(
+//                 filled: true,
+//                 fillColor: Colors.white,
+//                 contentPadding:
+//                     const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+//                 enabledBorder: OutlineInputBorder(
+//                   borderRadius: BorderRadius.circular(20.0),
+//                   borderSide: const BorderSide(color: Colors.grey),
+//                 ),
+//                 focusedBorder: OutlineInputBorder(
+//                   borderRadius: BorderRadius.circular(20.0),
+//                   borderSide: const BorderSide(color: Colors.blue),
 //                 ),
 //               ),
-//               SizedBox(height: 30),
-//               Center(
-//                 child: ElevatedButton(
-//                   onPressed: () async {
-//                     await Controller().postservice(Servicemodel(
-//                         title: titleController.text,
-//                         description: descriptionController.text,
-//                         price: double.parse(priceController.text),
-//                         duration: _getDurationInHours(selectedDuration),
-//                         category: selectedCategory));
-//                   },
-//                   child: Text("Post Service"),
-//                   style: ElevatedButton.styleFrom(
-//                     backgroundColor: Color.fromRGBO(8, 38, 76, 1),
-//                     padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-//                     textStyle: TextStyle(fontSize: 18),
-//                   ),
-//                 ),
+//               items: selectedCategoryList.map((String option) {
+//                 return DropdownMenuItem<String>(
+//                   value: option,
+//                   child: Text(option),
+//                 );
+//               }).toList(),
+//               onChanged: (String? newValue) {
+//                 setState(() {
+//                   selectedOption = newValue;
+//                 });
+//               },
+//               hint: const Text("Select a Category"),
+//               borderRadius: BorderRadius.circular(20.0),
+//             ),
+//             const SizedBox(height: 10),
+//             Expanded(
+//               child: StreamBuilder<QuerySnapshot>(
+//                 stream: WorkNowController()
+//                     .getMyPostSelectedCategoryWork(widget.selectedCategory),
+//                 builder: (context, snapshot) {
+//                   if (snapshot.connectionState == ConnectionState.waiting) {
+//                     return const Center(
+//                       child: CircularProgressIndicator(),
+//                     );
+//                   }
+//                   if (snapshot.hasError) {
+//                     return const Center(
+//                       child: Text("Error loading works"),
+//                     );
+//                   }
+//                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+//                     return const Center(
+//                       child: Text("No Work"),
+//                     );
+//                   }
+
+//                   List<Postworkmodel> listOfWork = [];
+//                   if (selectedOption != null) {
+//                     final list = snapshot.data!.docs
+//                         .map((e) => Postworkmodel.fromData(
+//                             e.data() as Map<String, dynamic>))
+//                         .toList();
+
+//                     listOfWork = list
+//                         .where((element) => element.subCategory == selectedOption)
+//                         .toList();
+//                   } else {
+//                     listOfWork = snapshot.data!.docs
+//                         .map((e) => Postworkmodel.fromData(
+//                             e.data() as Map<String, dynamic>))
+//                         .toList();
+//                   }
+
+//                   return GridView.builder(
+//                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+//                       crossAxisCount: 2,
+//                       crossAxisSpacing: 10,
+//                       mainAxisSpacing: 10,
+//                     ),
+//                     itemCount: listOfWork.length,
+//                     itemBuilder: (context, index) {
+//                       final work = listOfWork[index];
+//                       return SizedBox(
+//                         child: Stack(
+//                           children: [
+//                             InkWell(
+//                               onTap: () {
+//                                 // Implement work item tap action
+//                               },
+//                               child: Card(
+//                                 shape: RoundedRectangleBorder(
+//                                   borderRadius: BorderRadius.circular(20.0),
+//                                 ),
+//                                 child: Padding(
+//                                   padding: const EdgeInsets.all(8.0),
+//                                   child: Column(
+//                                     children: [
+//                                       Container(
+//                                         margin: const EdgeInsets.all(10),
+//                                         child: ClipRRect(
+//                                           borderRadius: BorderRadius.circular(10),
+//                                           child: CircleAvatar(
+//                                             radius: 50,
+//                                             backgroundImage: work.profileImage != null
+//                                                 ? (work.profileImage!.startsWith('http')
+//                                                     ? NetworkImage(work.profileImage!)
+//                                                     : FileImage(File(work.profileImage!))
+//                                                         as ImageProvider)
+//                                                 : const AssetImage(
+//                                                     "assets/profile_placeholder.png",
+//                                                   ),
+//                                           ),
+//                                         ),
+//                                       ),
+//                                       Text(
+//                                         work.title,
+//                                         style: const TextStyle(
+//                                             fontWeight: FontWeight.bold),
+//                                         textAlign: TextAlign.center,
+//                                       ),
+//                                       Text(
+//                                         work.description,
+//                                         textAlign: TextAlign.center,
+//                                       ),
+//                                     ],
+//                                   ),
+//                                 ),
+//                               ),
+//                             ),
+//                             Positioned(
+//                               right: 8,
+//                               top: 8,
+//                               child: Container(
+//                                 alignment: Alignment.center,
+//                                 width: 45,
+//                                 height: 45,
+//                                 decoration: BoxDecoration(
+//                                   color: Colors.grey.shade300,
+//                                   borderRadius: BorderRadius.circular(20),
+//                                 ),
+//                                 child: IconButton(
+//                                   onPressed: () {
+//                                     FirebaseFirestore.instance
+//                                         .collection('Post Work Info')
+//                                         .doc(work.workId)
+//                                         .delete()
+//                                         .then((value) {
+//                                       ScaffoldMessenger.of(context).showSnackBar(
+//                                         const SnackBar(
+//                                           content: Text('DELETE SUCCESSFUL'),
+//                                         ),
+//                                       );
+//                                     });
+//                                   },
+//                                   icon: const Icon(
+//                                     Icons.delete,
+//                                     color: Colors.black54,
+//                                   ),
+//                                 ),
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                       );
+//                     },
+//                   );
+//                 },
 //               ),
-//             ],
-//           ),
+//             ),
+//           ],
 //         ),
 //       ),
 //     );
-//   }
-
-//   Widget _buildSectionTitle(String title) {
-//     return Text(
-//       title,
-//       style: TextStyle(
-//           fontWeight: FontWeight.bold,
-//           fontSize: 18,
-//           color: Color.fromRGBO(8, 38, 76, 1)),
-//     );
-//   }
-
-//   Widget _buildTextField(String hintText,
-//       {int? maxLength, required TextEditingController controller}) {
-//     return Padding(
-//       padding: const EdgeInsets.symmetric(vertical: 8.0),
-//       child: TextFormField(
-//         controller: controller,
-//         maxLength: maxLength,
-//         decoration: InputDecoration(
-//           border: OutlineInputBorder(),
-//           labelText: hintText,
-//           counterText: '',
-//           hintStyle: TextStyle(color: Colors.grey),
-//         ),
-//       ),
-//     );
-//   }
-
-//   Widget _buildPriceField(
-//       {required String label,
-//       required String hintText,
-//       required TextEditingController controller}) {
-//     return SizedBox(
-//       width: MediaQuery.of(context).size.width * 0.45, // Adjusted for padding
-//       child: TextFormField(
-//         controller: controller,
-//         keyboardType: TextInputType.number,
-//         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-//         decoration: InputDecoration(
-//           border: OutlineInputBorder(),
-//           labelText: label,
-//           hintText: hintText,
-//           counterText: '',
-//           hintStyle: TextStyle(color: Colors.grey),
-//         ),
-//       ),
-//     );
-//   }
-
-//   Widget _buildDropdownField(
-//       {required String label, required List<String> items, required String value}) {
-//     return SizedBox(
-//       width: MediaQuery.of(context).size.width * 0.45, // Adjusted for padding
-//       child: DropdownButtonFormField<String>(
-//         value: value,
-//         onChanged: (newValue) {
-//           setState(() {
-//             if (label == "Duration") {
-//               selectedDuration = newValue!;
-//             } else {
-//               selectedCategory = newValue!;
-//             }
-//           });
-//         },
-//         decoration: InputDecoration(
-//           border: OutlineInputBorder(),
-//           labelText: label,
-//           hintText: label,
-//         ),
-//         items: items.map<DropdownMenuItem<String>>((String value) {
-//           return DropdownMenuItem<String>(
-//             value: value,
-//             child: Text(value),
-//           );
-//         }).toList(),
-//       ),
-//     );
-//   }
-
-//   int _getDurationInHours(String duration) {
-//     switch (duration) {
-//       case '1 Hour':
-//         return 1;
-//       case '2 Hours':
-//         return 2;
-//       case '4 Hours':
-//         return 4;
-//       case 'Less than 24 Hours':
-//         return 24;
-//       default:
-//         return 0;
-//     }
 //   }
 // }

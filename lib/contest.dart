@@ -1,123 +1,180 @@
 import 'package:flutter/material.dart';
-import 'package:flux/application.dart';
 import 'package:flux/postacontest.dart';
-import 'package:flux/savedmessage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flux/model/contestmodel.dart';
+import 'package:flux/utils/string.dart';
 
-class cont extends StatefulWidget {
-  cont({super.key});
+class ContestsPage extends StatefulWidget {
+  const ContestsPage({Key? key}) : super(key: key);
 
   @override
-  State<cont> createState() => _contState();
+  State<ContestsPage> createState() => _ContestsPageState();
 }
 
-class _contState extends State<cont> {
-  final List<String> contestTitles = [
-    "Design a Logo for a clothing brand",
-    "Develop a mobile app for a food delivery service",
-    "Write a creative blog post on social media marketing",
-  ];
+class _ContestsPageState extends State<ContestsPage> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  final List<String> contestDescriptions = [
-    "We're looking for a logo that's simple and modern. Our company name is 'Wardrobe'",
-    "The app should be user-friendly and efficient for both customers and restaurants.",
-    "The blog post should be informative and engaging for a target audience of business owners.",
-  ];
+  Stream<List<Contestmodel>> _getContests() {
+    return _firestore.collection('Contests').snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return Contestmodel.fromData(doc.data() as Map<String, dynamic>);
+      }).toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Contest Details", style: TextStyle(color: Colors.white)),
-        backgroundColor: Color.fromRGBO(8, 38, 76, 1),
+        title: const Text("Contest Details", style: TextStyle(color: Colors.white)),
+        backgroundColor: const Color.fromRGBO(8, 38, 76, 1),
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios_new_outlined, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => pcont()));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => pcont()),
+              );
             },
-            child: Text(
+            child: const Text(
               "Create",
               style: TextStyle(color: Colors.white),
             ),
-          )
+          ),
         ],
         centerTitle: true,
       ),
-      body: ListView.builder(
-        itemCount: contestTitles.length,
-        itemBuilder: (context, index) {
-          return Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AspectRatio(
-                      aspectRatio: 4 / 2,
-                      child: Container(
-                        child: Image.asset(
-                          "asset/Rectangle 73.png", // Replace with your contest image asset
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      contestTitles[index],
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 10),
-                    Text(contestDescriptions[index]),
-                    // Add more details about the contest if needed
-                    SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            _showSnackBar(context, "Successfully Applied!");
-                            // Navigate to the application screen
-                            // Navigator.push(context, MaterialPageRoute(builder: (context) => Application()));
-                          },
-                          child: Text("Apply"),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            _showSnackBar(context, "Contest Saved!");
-                            // Navigate to the saved message screen
-                            // Navigator.push(context, MaterialPageRoute(builder: (context) => SavedMessage()));
-                          },
-                          child: Text("Save"),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            // Navigate to the application screen
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => application()));
-                          },
-                          child: Text("View"),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                  ],
-                ),
-              ),
-            ),
+      body: StreamBuilder<List<Contestmodel>>(
+        stream: _getContests(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No contests available'));
+          }
+
+          final contests = snapshot.data!;
+
+          return ListView.builder(
+            itemCount: contests.length,
+            itemBuilder: (context, index) {
+              final contest = contests[index];
+              return ContestCard(contest: contest);
+            },
           );
         },
       ),
     );
   }
+}
 
-  void _showSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(content: Text(message));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+class ContestCard extends StatelessWidget {
+  final Contestmodel contest;
+
+  const ContestCard({Key? key, required this.contest}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    final uid = contest.uid;
+    final Stream<DocumentSnapshot> userStream =
+        _firestore.collection('Profile Info').doc(uid).snapshots();
+
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      elevation: 4,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            StreamBuilder<DocumentSnapshot>(
+              stream: userStream,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+                if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                }
+                if (!snapshot.hasData || snapshot.data!.data() == null) {
+                  return const Text('User data not available');
+                }
+                final userData = snapshot.data!.data() as Map<String, dynamic>;
+                return ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: CircleAvatar(
+                    radius: 25,
+                    backgroundImage: NetworkImage(userData['image'] ?? 'https://via.placeholder.com/150'),
+                  ),
+                  title: Text(
+                    
+                    userData['name'] ?? 'No Name',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 10),
+            Text(
+              contest.title ?? 'No Title',
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            const SizedBox(height: 10),
+            Text(contest.description ?? 'No Description'),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {},
+                  child: const Text("Join"),
+                ),
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                  ),
+                  child: const Text("Delete"),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
+
+// class PostContestPage extends StatelessWidget {
+//   const PostContestPage({Key? key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text("Post a Contest"),
+//         backgroundColor: const Color.fromRGBO(8, 38, 76, 1),
+//       ),
+//       body: const Center(
+//         child: Text(
+//           'Post Contest Page',
+//           style: TextStyle(fontSize: 24),
+//         ),
+//       ),
+//     );
+//   }
+// }

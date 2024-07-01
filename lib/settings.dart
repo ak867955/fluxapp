@@ -1,10 +1,23 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flux/chatpage.dart';
+import 'package:flux/model/addressmodel.dart';
+import 'package:flux/model/collection.dart';
+import 'package:flux/model/myprofilemodel.dart';
 import 'package:flux/feedback.dart';
+import 'package:flux/utils/string.dart';
 
-class settings extends StatelessWidget {
-  const settings({super.key});
+class SettingsPage extends StatefulWidget {
+  SettingsPage({super.key, required this.user, required this.address});
 
+  Myprofilemodel? user;
+  Addressmodel? address;
+
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +28,7 @@ class settings extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back,color: Colors.white),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
         ),
         centerTitle: true,
       ),
@@ -29,84 +42,104 @@ class settings extends StatelessWidget {
               _buildListTile(
                 context,
                 title: "Phone Number",
-                trailing: TextButton(onPressed: () {}, child: Text("9856743859")),
+                trailing:
+                    TextButton(onPressed: () {}, child: Text(auth.currentUser!.phoneNumber.toString())),
               ),
               _buildListTile(
                 context,
                 title: "Profile Photo",
-                trailing: Icon(Icons.navigate_next_rounded, color: Colors.black),
+                trailing: CircleAvatar(
+                  radius: 30,
+                  backgroundImage: NetworkImage(widget.user!.url),
+                ),
               ),
               _buildListTile(
                 context,
                 title: "Name",
-                trailing: TextButton(onPressed: () {}, child: Text("Jack")),
+                trailing: TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      widget.user!.firstname + widget.user!.secondname,
+                    )),
               ),
-              _buildSectionTitle("Privacy & Security"),
-              _buildListTile(
-                context,
-                title: "See my location",
-                trailing: TextButton(onPressed: () {}, child: Text("Everyone")),
-              ),
-              _buildListTile(
-                context,
-                title: "Contact me",
-                trailing: TextButton(onPressed: () {}, child: Text("Everyone")),
+              _buildSectionTitle("Location"),
+              FutureBuilder<Addressmodel?>(
+                future: Controller().getAddres(auth.currentUser!.uid),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator(); 
+                  }
+
+                  if (snapshot.hasError) {
+                    return Text(
+                        'Error: ${snapshot.error}');  
+                  }
+
+                  final data = snapshot.data;
+                  if (data == null) {
+                    return Text(
+                        'No data available');  
+                  }
+
+                  return _buildListTile(
+                    context,
+                    title: "My location",
+                    trailing: TextButton(
+                      onPressed: () {},
+                      child: Text(data
+                          .districts), 
+                    ),
+                  );
+                },
               ),
               _buildSectionTitle("Support"),
               _buildListTile(
                 context,
-                title: "Help Center",
-                trailing: IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ChatPage()),
-                    );
-                  },
-                  icon: Icon(Icons.task_alt),
-                ),
+                title: "Contact Us",
+                trailing:
+                    TextButton(onPressed: () {}, child: Text("flux@gmail.com")),
               ),
-              _buildListTile(
-                context,
-                title: "Report a problem",
-                trailing: IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ChatPage()),
-                    );
-                  },
-                  icon: Icon(Icons.report),
-                ),
-              ),
-              _buildListTile(
-                context,
-                title: "Feedback",
-                trailing: IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => fb()),
-                    );
-                  },
-                  icon: Icon(Icons.help_center_outlined),
-                ),
-              ),
-              _buildSectionTitle("Language"),
-              SizedBox(height: 20),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: Text(
-                    "Log Out",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    minimumSize: Size(150, 50),
-                  ),
-                ),
-              ),
+              // _buildListTile(
+              //   context,
+              //   title: "Report a problem",
+              //   trailing: IconButton(
+              //     onPressed: () {
+              //       Navigator.push(
+              //         context,
+              //         MaterialPageRoute(builder: (context) => ChatPage()),
+              //       );
+              //     },
+              //     icon: Icon(Icons.report),
+              //   ),
+              // ),
+              // _buildListTile(
+              //   context,
+              //   title: "Feedback",
+              //   trailing: IconButton(
+              //     onPressed: () {
+              //       Navigator.push(
+              //         context,
+              //         MaterialPageRoute(builder: (context) => fb()),
+              //       );
+              //     },
+              //     icon: Icon(Icons.help_center_outlined),
+              //   ),
+              // ),
+              // _buildSectionTitle("Language"),
+              // SizedBox(height: 20),
+              // Center(
+              //   child: ElevatedButton(
+              //     onPressed: () {},
+              //     child: Text(
+              //       "Log Out",
+              //       style: TextStyle(fontWeight: FontWeight.bold),
+              //     ),
+              //     style: ElevatedButton.styleFrom(
+              //       backgroundColor: Colors.black,
+              //       minimumSize: Size(150, 50),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),

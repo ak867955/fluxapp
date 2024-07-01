@@ -1,28 +1,41 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flux/channelchat.dart';
-import 'package:flux/collection/newchannelmodel.dart';
+import 'package:flux/model/myprofilemodel.dart';
+import 'package:flux/model/newchannelmodel.dart';
 import 'package:flux/data/channel_controller.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flux/newchannel.dart';
 
 class Channel {
   final String name;
   final String? iconUrl;
-  final int memberCount;
+  final int memberCount; 
 
   const Channel({required this.name, this.iconUrl, required this.memberCount});
 }
 
-class mychannels extends StatelessWidget {
+class mychannels extends StatefulWidget {
   const mychannels({super.key});
 
   @override
+  State<mychannels> createState() => _mychannelsState(); 
+}
+
+class _mychannelsState extends State<mychannels> { 
+  Myprofilemodel? currentUserModel;
+
+  Future<Myprofilemodel> getCurrentUserProfile() async {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final doc = await FirebaseFirestore.instance
+        .collection("Profile Info")
+        .doc(uid)
+        .get();
+    return Myprofilemodel.fromData(doc.data() as Map<String, dynamic>);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    //  List<Channel> channels = [
-
-    //   // Add more channels...
-    // ];
-
     return Scaffold(
       body: Column(
         children: [
@@ -56,24 +69,28 @@ class mychannels extends StatelessWidget {
                                     )
                                   : Icon(Icons.chat),
                               title: Text(channel.name),
-                              subtitle: Text(
-                                  "${channel.members.map((e) => e).join(",")} Members"),
-                              onTap: () {
-                                // Navigate based on channel name
-                                // if (channel.name == "Flutter Dev") {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) =>
-                                //             cchat())); // Replace MyWork with your actual destination widget
-                                // } else if (channel.name == "Samsung Inc") {
+                              subtitle:
+                                  Text("${channel.members.length} Members"),
+                              trailing: IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () async {
+                                  await ChannelController().deleteChannel(channel.channelId!);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('Channel Deleted')),
+                                  );
+                                },
+                              ),
+                              onTap: () async {
+                                Myprofilemodel senderProfileModel =
+                                    await getCurrentUserProfile();
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => cchat(
+                                        builder: (context) => ChannelChat(
                                               channelModel: channel,
-                                            ))); // Replace MyWork with your actual destination widget
-                                // }
+                                              senderProfileModel:
+                                                  senderProfileModel,
+                                            )));
                               },
                             );
                           },

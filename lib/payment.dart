@@ -1,31 +1,37 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flux/paymentpage.dart';
+import 'package:flux/worknow/screen_payment.dart';
 
 class payment extends StatefulWidget {
-  const payment({super.key});
+  String anotherUserId;
+  payment({super.key, required this.anotherUserId});
 
   @override
   State<payment> createState() => _paymentState();
 }
 
 class _paymentState extends State<payment> {
-  int _selectedPaymentMethod = 0;
-
+  final amount = TextEditingController();
+  final note = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Pay",style: TextStyle(color: Colors.white)),
-        backgroundColor: const Color.fromRGBO(8, 38, 76, 1),
+        title: const Text("Pay", style: TextStyle(color: Colors.white)),
+        backgroundColor: const Color.fromRGBO(8, 38, 76, 1), 
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back,color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+      body: Padding(
+        padding: const EdgeInsets.all(18.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -36,6 +42,12 @@ class _paymentState extends State<payment> {
             ),
             const SizedBox(height: 10),
             TextField(
+              onChanged: (value) {
+                setState(() {
+                  
+                });
+              },
+              controller: amount,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -51,6 +63,7 @@ class _paymentState extends State<payment> {
             ),
             const SizedBox(height: 10),
             TextField(
+              controller: note,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -64,25 +77,47 @@ class _paymentState extends State<payment> {
               "Choose Payment Method",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
-            const SizedBox(height: 10),
-            _buildPaymentMethodOption(
-              context,
-              1,
-              "Google Pay",
-              "Pay securely using Google Pay",
-            ),
-            _buildPaymentMethodOption(
-              context,
-              2,
-              "Amazon Pay",
-              "Pay securely using Amazon Pay",
-            ),
+            SizedBox(height: 10),
+              amount.text.isNotEmpty?      FutureBuilder(
+                future: FirebaseFirestore.instance
+                    .collection("Bank Details")
+                    .doc(widget.anotherUserId)
+                    .get(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (snapshot.data!.exists) {
+                    return Expanded(
+                      child: PaymentScreen(
+                          amount: double.parse(amount.text),
+                          accountHolerName:
+                              snapshot.data!.data()!["Account Holder Name"],
+                          recieverUPIID: snapshot.data!.data()!["UPI iD"]),
+                    );
+                  } else {
+                    // return Expanded(
+                    //   child: PaymentScreen(
+                    //       amount: double.parse(amount.text),
+                    //       accountHolerName:
+                    //          "szx",
+                    //       recieverUPIID: "1234567890@paytm"),   //lllllllllllllllllllllllllllllllllllllllllllllll
+                    // );
+        
+                  return Center(child: Text("Bank Details Not Found"),);
+                  }
+                }):SizedBox(),
             const SizedBox(height: 30),
             Center(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                
+                },
                 style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 40),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 40),
                   backgroundColor: const Color.fromRGBO(8, 38, 76, 1),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -93,57 +128,6 @@ class _paymentState extends State<payment> {
                   style: TextStyle(fontSize: 18),
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPaymentMethodOption(BuildContext context, int value, String title, String subtitle) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedPaymentMethod = value;
-        });
-      },
-      child: Container(
-        padding: const EdgeInsets.all(16.0),
-        margin: const EdgeInsets.symmetric(vertical: 8.0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(
-            color: _selectedPaymentMethod == value
-                ? const Color.fromRGBO(8, 38, 76, 1)
-                : Colors.grey.shade300,
-          ),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Radio(
-                  value: value,
-                  groupValue: _selectedPaymentMethod,
-                  onChanged: (int? newValue) {
-                    setState(() {
-                      _selectedPaymentMethod = newValue!;
-                    });
-                  },
-                  activeColor: const Color.fromRGBO(8, 38, 76, 1),
-                ),
-                const SizedBox(width: 10),
-                Text(
-                  title,
-                  style: const TextStyle(fontSize: 16),
-                ),
-              ],
-            ),
-            Text(
-              subtitle,
-              style: const TextStyle(color: Colors.grey, fontSize: 8),
             ),
           ],
         ),

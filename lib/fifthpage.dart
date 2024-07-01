@@ -5,13 +5,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:flux/collection/myprofilemodel.dart';
+import 'package:flux/model/myprofilemodel.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flux/drawer.dart';
 import 'package:flux/flux.dart';
 import 'package:flux/chat.dart';
-import 'package:flux/collection/collection.dart';
-import 'package:flux/collection/profilemodel.dart';
+import 'package:flux/model/collection.dart';
+// import 'package:flux/collection/profilemodel.dart';
 
 class page5 extends StatefulWidget {
   const page5({super.key});
@@ -30,6 +30,7 @@ class _page5State extends State<page5> {
   TextEditingController qualificationcontroller = TextEditingController();
   TextEditingController experiencecontroller = TextEditingController();
   TextEditingController agecontroller = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
   String? _selectedGender;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -47,6 +48,17 @@ class _page5State extends State<page5> {
         RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
     if (!emailRegExp.hasMatch(value)) {
       return 'Please enter a valid email';
+    }
+    return null;
+  }
+
+  String? _validatePhoneNumber(String? value) {
+    if (value!.isEmpty) {
+      return 'Please enter a phone number';
+    }
+    RegExp phoneRegExp = RegExp(r'^[6-9]\d{9}$');
+    if (!phoneRegExp.hasMatch(value)) {
+      return 'Please enter a valid Indian phone number';
     }
     return null;
   }
@@ -163,7 +175,7 @@ class _page5State extends State<page5> {
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: Colors.blue, width: 2),
+                      borderSide: BorderSide(color: Colors.blue, width: 2), 
                     ),
                     labelText: "Second Name",
                     labelStyle: TextStyle(color: Colors.black),
@@ -185,6 +197,26 @@ class _page5State extends State<page5> {
                       borderSide: BorderSide(color: Colors.blue, width: 2),
                     ),
                     labelText: "Email",
+                    labelStyle: TextStyle(color: Colors.black),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                TextFormField(
+                  controller: phoneNumberController,
+                  validator: _validatePhoneNumber,
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Colors.blue, width: 2),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Colors.blue, width: 2),
+                    ),
+                    labelText: "Phone Number",
                     labelStyle: TextStyle(color: Colors.black),
                   ),
                 ),
@@ -294,16 +326,20 @@ class _page5State extends State<page5> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await Controller().addprofile(Myprofilemodel(
-              firstname: firstnameController.text,
-              secondname: secondnameController.text,
-              aboutme: aboutmecontroller.text,
-              skill: skillcontroller.text,
-              qualification: qualificationcontroller.text,
-              experience: experiencecontroller.text,
-              age: int.parse(agecontroller.text),
-              gender: _selectedGender.toString(),
-              email: emailController.text,
-              url: url!));
+            firstname: firstnameController.text,
+            secondname: secondnameController.text,
+            aboutme: aboutmecontroller.text,
+            skill: skillcontroller.text,
+            qualification: qualificationcontroller.text,
+            experience: experiencecontroller.text,
+            age: int.parse(agecontroller.text),
+            gender: _selectedGender.toString(),
+            email: emailController.text,
+            url: url!,
+            rating: 0,
+            since: DateTime.now().year.toString(),
+            phoneNumber: phoneNumberController.text.trim(),
+          ));
 
           // Navigate to Chat page
           Navigator.pushAndRemoveUntil(

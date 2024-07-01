@@ -29,7 +29,7 @@ class _bottomnavipageState extends State<bottomnavipage> {
     const Chat(),
     const channels(),
     worknow(),
-    service(),
+    ServiceScreen(),
     // const mychannels(),
   ];
 

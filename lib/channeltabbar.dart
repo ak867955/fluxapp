@@ -6,15 +6,17 @@ import 'package:flux/channelfile.dart';
 import 'package:flux/channellinks.dart';
 import 'package:flux/channelsearch.dart';
 import 'package:flux/channelmenu.dart';
-import 'package:flux/collection/newchannelmodel.dart';
+import 'package:flux/model/myprofilemodel.dart';
+import 'package:flux/model/newchannelmodel.dart';
 import 'package:flux/drawer.dart';
 import 'package:flux/mychannels.dart';
 import 'package:flux/profile.dart';
 
 class ctab extends StatefulWidget {
     ChannelModel channelModel;
+    final Myprofilemodel senderProfileModel; 
 
-   ctab({super.key,required this.channelModel});
+   ctab({super.key,required this.channelModel,required this.senderProfileModel,});
 
   @override
   State<ctab> createState() => _ChannelsState();
@@ -26,23 +28,23 @@ class _ChannelsState extends State<ctab> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 1,
       child: Scaffold(
         appBar: AppBar(
-          bottom: const TabBar(
+          bottom: const TabBar( 
             tabs: [
               const Tab(
                 child: Text("About",style: TextStyle(color: Colors.white)),
               ),
-              Tab(
-                child: Text("Files",style: TextStyle(color: Colors.white)),
-              ),
-              Tab(
-                child: Text("Audio",style: TextStyle(color: Colors.white)),
-              ),
-              Tab(
-                child: Text("Links",style: TextStyle(color: Colors.white)),
-              ),
+              // Tab(
+              //   child: Text("Files",style: TextStyle(color: Colors.white)),
+              // ),
+              // Tab(
+              //   child: Text("Audio",style: TextStyle(color: Colors.white)),
+              // ),
+              // Tab(
+              //   child: Text("Links",style: TextStyle(color: Colors.white)),
+              // ),
             ],
           ),
           title: const Text("FLUX",style: TextStyle(color: Colors.white)),
@@ -53,33 +55,33 @@ class _ChannelsState extends State<ctab> {
             }, // Go back
             icon: const Icon(Icons.arrow_back,color: Colors.white),
           ),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => csearch()));
-                },
-                icon: const Icon(Icons.search,color: Colors.white)),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CircleAvatar(
-                backgroundImage: const AssetImage("asset/Ellipse 22.png"),
-                child: InkWell(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const profile()),
-                  ),
-                ),
-              ),
-            ),
+          actions: [ 
+            // IconButton(
+            //     onPressed: () {
+            //       Navigator.push(context,
+            //           MaterialPageRoute(builder: (context) => csearch()));
+            //     },
+            //     icon: const Icon(Icons.search,color: Colors.white)),
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: CircleAvatar(
+            //     backgroundImage: const AssetImage("asset/Ellipse 22.png"),
+            //     child: InkWell(
+            //       onTap: () => Navigator.push(
+            //         context,
+            //         MaterialPageRoute(builder: (context) =>  ChatOpponentProfile( opponentProfileModel: widget.senderProfileModel,)),
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
         body: TabBarView(
           children: [
              cmenu(channelModel: widget.channelModel,), // Use the AllChannels widget directly
-            cfile(), // Use the MyChannels widget directly
-            caudio(),
-            clink(),
+            // cfile(), // Use the MyChannels widget directly
+            // caudio(),
+            // clink(),
           ],
         ),
       ),

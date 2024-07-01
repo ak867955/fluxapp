@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart';
 
-class call extends StatefulWidget {
-  const call({super.key});
+class CallPage extends StatefulWidget {
+  const CallPage({super.key});
 
   @override
-  State<call> createState() => _callState();
+  State<CallPage> createState() => _CallPageState();
 }
 
-class _callState extends State<call> {
+class _CallPageState extends State<CallPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Calling",style: TextStyle(color: Colors.white),),
+        title: const Text(
+          "Calling",
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: const Color.fromRGBO(8, 38, 76, 1),
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(Icons.arrow_back,color: Colors.white,),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
         ),
         centerTitle: true,
       ),
@@ -27,15 +33,13 @@ class _callState extends State<call> {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            Container(
-              height: 200,
-              width: double.infinity,
-              child: AspectRatio(
-                aspectRatio: 4 / 1,
-                child: Image.asset(
-                  "asset/Rectangle 73.png",
-                  fit: BoxFit.cover,
-                ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(15.0),
+              child: Image.asset(
+                "asset/Rectangle 73.png",
+                height: 200,
+                width: double.infinity,
+                fit: BoxFit.cover,
               ),
             ),
             const SizedBox(height: 20),
@@ -43,7 +47,7 @@ class _callState extends State<call> {
               "Jasmin",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 24,
+                fontSize: 28,
                 color: Colors.black,
               ),
             ),
@@ -59,11 +63,11 @@ class _callState extends State<call> {
             const SizedBox(height: 20),
             Expanded(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   _buildActionButton("Mute", Icons.mic_off),
                   _buildActionButton("Speaker", Icons.volume_up),
-                  _buildActionButton("End call", Icons.call_end, isEndCall: true),
+                  _buildActionButton("End Call", Icons.call_end, isEndCall: true),
                 ],
               ),
             ),
@@ -93,7 +97,11 @@ class _callState extends State<call> {
         const SizedBox(height: 5),
         Text(
           label,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+            color: Colors.black54,
+          ),
         ),
       ],
     );
@@ -105,12 +113,13 @@ class _callState extends State<call> {
       icon: Icon(icon, color: Colors.white),
       label: Text(label),
       style: ElevatedButton.styleFrom(
-        backgroundColor: isEndCall ? Colors.red : Colors.black,
+        backgroundColor: isEndCall ? Colors.red : Colors.blueGrey[700],
         foregroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),
+        elevation: isEndCall ? 8 : 4,
       ),
     );
   }
